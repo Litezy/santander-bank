@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+
+<body style="margin: 0;background: whitesmoke;">
+
+
+    <div style=" font-family: Arial, Helvetica, sans-serif; padding-bottom: 1rem; padding-top: 1rem;">
+        <div
+            style="width: 90%; max-width: 32rem;margin: 0 auto;text-align: center; padding: 2rem 1rem; background: white; border-top: 5px solid #f35327;">
+            <h1 style="font-size: 1rem; text-transform: capitalize;">Hi {{username}},</h1>
+            <div style="font-weight: light;text-align: center;">🎉 Great Job! 🎉
+            You've just topped up your savings, bringing you one step closer to achieving your financial goals. Every
+            deposit counts, and we’re thrilled to see your dedication. Keep up the momentum, and together, we'll make
+            sure you reach your savings target faster than ever. 💪 Here’s to your continued progress and success! 🚀</div>
+            <h2 style="font-size: 1.2rem;">TopUp Details</h2>
+            <div style="background-color: whitesmoke;padding: 0.5rem;">
+                <div style="display: flex; flex-direction: row; justify-content: space-between;padding: 0.5rem;">
+                    <div style="text-align: left;">Goal Savings Name</div>
+                    <div style="width: fit-content; margin-left: auto; text-transform: capitalize;">{{goalname}}</div>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between;padding: 0.5rem;">
+                    <div style="text-align: left;">Goal Target</div>
+                    <div style="width: fit-content; margin-left: auto;">{{goaltarget}}</div>
+                </div>
+                <div style="display: flex; flex-direction: row; justify-content: space-between;padding: 0.5rem;">
+                    <div style="text-align: left;">Topup amount</div>
+                    <div style="width: fit-content; margin-left: auto;">{{goalcurrent}}</div>
+                </div>
+            </div>
+            <div style="padding: 1rem 0; border-bottom: 1px solid lightgrey;margin-bottom: 1rem;">{{date}}</div>
+            <div>
+                If you need help or support, kindly contact Pinerock Credit Union support  at support@pinerockcreditunion.com or simply reply to this email.</div>
+        </div>
+
+    </div>
+</body>
+
+</html>

@@ -1,0 +1,14 @@
+.carousel_embla {
+  overflow: hidden;
+}
+.carousel_embla__container {
+  display: flex;
+  /* border: 2px solid red; */
+
+}
+.carousel_embla__slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  width: 100%;
+  
+}

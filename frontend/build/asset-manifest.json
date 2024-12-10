@@ -1,0 +1,37 @@
+{
+  "files": {
+    "main.css": "/static/css/main.730b33e4.css",
+    "main.js": "/static/js/main.f25bcf28.js",
+    "static/media/contact.jpg": "/static/media/contact.d40bb9e5f5e1dd682bca.jpg",
+    "static/media/abt.jpg": "/static/media/abt.1f00b944f16a33760edf.jpg",
+    "static/media/bans.jpg": "/static/media/bans.be14de4a57b6d7ab69d2.jpg",
+    "static/media/faq3.jpg": "/static/media/faq3.05cecf8d7a23fc62807b.jpg",
+    "static/media/pendingkyc.gif": "/static/media/pendingkyc.296aceacc4b6289b78c6.gif",
+    "static/media/services.jpg": "/static/media/services.e5ca4f4a66d5ac5eb962.jpg",
+    "static/media/not-found.png": "/static/media/not-found.f75d9e6a32931a2c84d1.png",
+    "static/media/privacy.jpg": "/static/media/privacy.f0955cc970fad84b877c.jpg",
+    "static/media/contactimg.jpg": "/static/media/contactimg.d0121fdc45f133c48d40.jpg",
+    "static/media/aboutus.jpg": "/static/media/aboutus.c8b9e0746def2f7e3fe1.jpg",
+    "static/media/terms.jpg": "/static/media/terms.a6a0ffd13f9ebad514d4.jpg",
+    "static/media/img3.jpg": "/static/media/img3.953d8289d55ea6ab4418.jpg",
+    "static/media/img4.jpg": "/static/media/img4.5a59b844a227565240d1.jpg",
+    "static/media/hero-slide-2.png": "/static/media/hero-slide-2.e62404772695c0966310.png",
+    "static/media/hero-slide-3.png": "/static/media/hero-slide-3.bdcbf0584d3942439061.png",
+    "static/media/img2.jpg": "/static/media/img2.7e7ec8c4f56027b8231b.jpg",
+    "static/media/hero-slide-1.png": "/static/media/hero-slide-1.e8bdc060b8047c212216.png",
+    "static/media/img.jpg": "/static/media/img.24ede1cf6794249184a9.jpg",
+    "static/media/img1.jpg": "/static/media/img1.a76de3898e51d2cd113d.jpg",
+    "static/media/visa.png": "/static/media/visa.b9647d888c1d82b578e6.png",
+    "static/media/kycpassed.png": "/static/media/kycpassed.7478b29c37a3f4cf9666.png",
+    "static/media/mastercard.png": "/static/media/mastercard.b0dd2a8048fd6ba440ae.png",
+    "static/media/img3.png": "/static/media/img3.66ec1ff7ab5580d080f3.png",
+    "static/media/loan1.png": "/static/media/loan1.88c699ae82b1efda0bed.png",
+    "index.html": "/index.html",
+    "main.730b33e4.css.map": "/static/css/main.730b33e4.css.map",
+    "main.f25bcf28.js.map": "/static/js/main.f25bcf28.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.730b33e4.css",
+    "static/js/main.f25bcf28.js"
+  ]
+}
