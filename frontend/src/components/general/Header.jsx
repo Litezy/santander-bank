@@ -102,7 +102,7 @@ const Header = () => {
         <div className={` flex items-center justify-between w-full`}>
 
           <div className="w-full flex ml-16 items-start flex-col lg:w-1/2 gap-3">
-            <div className="text-6xl  lite ">The best financial <br /> tools and advice for <br /> every need.</div>
+            <div className="text-[54px]  lite  leading-none">The best financial <br /> tools and advice for <br /> every need.</div>
             <div className="text-base w-8/12 font-normal">Simple and secure personal banking available in person, online, or on your device.</div>
             <div className="">
               <button className="bg-primary text-white text-base py-2 px-8 rounded-full">Choose your checking account</button>
