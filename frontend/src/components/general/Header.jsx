@@ -88,7 +88,7 @@ const Header = () => {
         </div>
 
         {dropdown.status &&
-          <div className="flex  bg-sec flex-col pt-10 items-start gap-1">
+          <div className="flex   flex-col pt-10 items-start gap-1">
             {sub.map((item, _) => {
               let firstIndex = _ === 0
               return (
