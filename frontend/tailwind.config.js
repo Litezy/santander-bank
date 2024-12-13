@@ -9,7 +9,8 @@ module.exports = {
         "primary": "#ec0000",
         "sec":'#f6f6f6',
         "col":"#f97316",
-        "slate":"#f1f2f5"
+        "slate":"#f1f2f5",
+        "dark":"#303030"
       }
     },
   },

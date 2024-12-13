@@ -10,7 +10,7 @@ export default function GeneralLayout({ children }) {
      
       <Header  />
       {children}
-      {/* <Footer /> */}
+      <Footer />
     </div>
   )
 }
