@@ -30,8 +30,8 @@ if(window.location.origin.includes('pinerockcreditunion.com')) {
  }
 
 if(window.location.origin.includes('localhost')) {
-    URL = 'http://localhost:5003'
-    profileImg = 'http://localhost:5003'
+    URL = 'http://localhost:5002'
+    profileImg = 'http://localhost:5002'
 }
 
 

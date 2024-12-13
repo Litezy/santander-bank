@@ -89,7 +89,7 @@ export default function Signup() {
         }
     }
     return (
-        <div className='bg-gradient-to-tr from-primary to-sec h-screen overflow-x-hidden'>
+        <div className='bg-primary h-screen overflow-x-hidden'>
             <div className="w-[90%] lg:w-[95%] mx-auto max-w-xl bg-white backdrop-blur-sm p-3 lg:p-5 rounded-lg my-10 ">
                 {!log &&<div className="text-3xl lg:text-4xl font-bold text-primary">Create Account</div>}
                {!log ? <form onSubmit={handleSubmission} className="mt-5">
@@ -183,14 +183,14 @@ export default function Signup() {
                         onChange={handleCheckboxChange}
                     />
                     <div className="text-sm">Confirm you agree to our 
-                        <Link className='text-blue-700 font-semibold' to={`/terms`}> terms of use</Link> and  
-                     <Link to={`/privacy-policy`} className='text-blue-700 font-semibold' > privacy policy</Link>.</div>
+                        <Link className='text-primary font-semibold' to={`/terms`}> terms of use</Link> and  
+                     <Link to={`/privacy-policy`} className='text-primary font-semibold' > privacy policy</Link>.</div>
                     </div>
 
 
-                    <Formbutton label="Create Account" loading={loading ? true :false}/>
-                    <div className="text-zinc-500 mt-5 text-center">Already have an account? <Link to="/login" className='text-blue-600'>Login Account</Link> </div>
-                    <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-blue-600'>Go back home</Link> </div>
+                    <Formbutton color={false} label="Create Account" loading={loading ? true :false}/>
+                    <div className="text-zinc-500 mt-5 text-center">Already have an account? <Link to="/" className='text-primary'>Login Account</Link> </div>
+                    <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-primary'>Go back home</Link> </div>
                 </form>:
                  <div className="flex items-start flex-col gap-5">
                  <div className="">Site Maintenance Notice</div>

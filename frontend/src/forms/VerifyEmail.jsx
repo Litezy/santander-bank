@@ -143,7 +143,7 @@ export default function VerifyEmailAccount() {
                             setup={setup}
                         />
                     </div>
-                    <Formbutton label="Verify " loading={false} />
+                    <Formbutton label="Verify " color={false} loading={false} />
 
                     <div className="flex items-center flex-col mt-5 gap-2">
                         <div className="">didn't receive code?</div>
@@ -154,7 +154,7 @@ export default function VerifyEmailAccount() {
                         <button onClick={RequestOtp} disabled={btnDisabled ? true : false} className='w-fit px-3 py-1 rounded-sm bg-primary text-white'>resend code</button>
                     </div>
                     <div className="mt-5">
-                        <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-blue-600'>Go back home</Link> </div>
+                        <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-primary'>Go back home</Link> </div>
                     </div>
                 </form>
             </div>

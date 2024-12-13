@@ -33,7 +33,13 @@ export default function Forminput({ onChange, formtype, isError, label,signup, p
             </Select>
           </>}
         {formtype === 'text' &&
-          <OutlinedInput name={name} value={value} onChange={onChange} onClick={onClick} />}
+          <OutlinedInput  
+          name={name} value={value} onChange={onChange} onClick={onClick}
+          // sx={{
+          //   "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+          //     borderColor: "ec0000", 
+          //   },}}
+          />}
         {formtype === 'number' &&
           <OutlinedInput name={name} value={value} type='number' onChange={onChange} onClick={onClick} />}
         {formtype === 'password' &&

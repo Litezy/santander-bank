@@ -81,7 +81,7 @@ export default function Footer() {
             {SocialMediaLinks.map((link,_) =>{
               return (
                 <div className="px-3 py-3 rounded-full bg-white">
-                  <link.Icon className="text-xl cursor-pointer hover:text-red-800"/>
+                  <link.Icon className="text-xl cursor-pointer text-[#6f7779] hover:text-red-800"/>
                 </div>
               )
             })}

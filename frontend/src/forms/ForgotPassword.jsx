@@ -43,6 +43,7 @@ export default function ForgotPassword() {
         setLoading(true)
         try {
             const res = await PostApi(Apis.non_auth.find_account, data)
+            console.log(res)
             if (res.status === 200) {
                 successMessage(res.msg)
                 setScreen(2)
@@ -101,7 +102,7 @@ export default function ForgotPassword() {
             const res = await PostApi(Apis.non_auth.change_user_pass, formdata)
             if (res.status === 200) {
                 successMessage(res.msg)
-                navigate('/login')
+                navigate('/')
             } else {
                 errorMessage(res.msg)
             }
@@ -176,7 +177,7 @@ export default function ForgotPassword() {
                                 onChange={handleForms}
                                 formtype="text" label="Email Address"
                             />
-                            <Formbutton label="Find my email" />
+                            <Formbutton color={false} label="Find my email" />
                         </form>
                     </>
                 }
@@ -184,7 +185,7 @@ export default function ForgotPassword() {
 
                 {screen === 2 &&
                     <form onSubmit={handleCode} className=''>
-                        <div onClick={() => setScreen(1)} className="w-fit mr-auto px-5  py-1 cursor-pointer rounded-full bg-gradient-to-tr from-primary to-sec text-white mb-2">
+                        <div onClick={() => setScreen(1)} className="w-fit mr-auto px-5  py-1 cursor-pointer rounded-full bg-primary text-white mb-2">
                             <FaLongArrowAltLeft className='text-white text-xl' />
                         </div>
                         <div className="text-center font-semibold">Enter OTP code sent to your email</div>
@@ -196,7 +197,7 @@ export default function ForgotPassword() {
                                 setup={setup}
                             />
                         </div>
-                        <Formbutton label="Submit code" />
+                        <Formbutton color={false} label="Submit code" />
 
 
                         <div className="flex mt-3  items-center justify-center flex-col gap-2">
@@ -231,14 +232,14 @@ export default function ForgotPassword() {
                                 label="Confirm Password"
 
                             />
-                            <Formbutton label="Change password" />
+                            <Formbutton color={false} label="Change password" />
 
 
                         </form>
                     </>
                 }
 
-                <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-blue-600'>Go back home</Link> </div>
+                <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-primary'>Go back home</Link> </div>
             </div>
         </div>
     )

@@ -1,23 +1,27 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import ButtonComponent from 'utils/ButtonComponent'
-import FormComponent from 'utils/FormComponent'
-import Forminput from 'utils/Forminput'
 import { CookieName, errorMessage, successMessage, UserRole } from 'utils/functions'
 import Cookies from 'js-cookie'
 import { Apis, PostApi } from 'services/Api'
 import { decodeToken } from 'react-jwt'
 import Loader from 'utils/Loader'
+import { GoChevronDown, GoChevronUp } from 'react-icons/go'
+import { MdClose } from 'react-icons/md'
 
-export default function Login() {
+export default function Login({openbanks,setOpenBanks,setLogin }) {
 
     const [loading, setLoading] = useState(false)
+    const bankings = ['Retail online banking', 'Mortgage accounts', 'business online banking', 'Investment services', 'consumer credit cards']
+  const [banks, setBanks] = useState(bankings[0])
     const [forms, setForms] = useState({
-        email: '',
+        username: '',
         password: ''
     })
 
-    const [login, setLogin] = useState(false)
+    const selectBank = (bank) => {
+        setBanks(bank)
+        setOpenBanks(false)
+      }
     const navigate = useNavigate()
 
     const handleChange = (e) => {
@@ -25,92 +29,94 @@ export default function Login() {
     }
 
 
-    const isValidEmail = (email) => {
-        const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
-        return emailPattern.test(email);
-    }
-
     const LoginAcc = async (e) => {
         e.preventDefault()
-        if (!forms.email) return errorMessage('Email address is required')
-        if (!isValidEmail(forms.email)) return errorMessage('Please input a valid email')
+        if (!forms.username) return errorMessage(' Username is required')
         if (!forms.password) return errorMessage('Password is required')
         const formdata = {
-            email: forms.email,
-            password: forms.password
+          username: forms.username,
+          password: forms.password
         }
         setLoading(true)
         try {
-            const response = await PostApi(Apis.non_auth.login, formdata)
-            if (response.status === 200) {
-                Cookies.set(CookieName, response.token,)
-                successMessage(response.msg)
-                const decoded = decodeToken(response.token)
-                const findUserRole = UserRole.find((ele) => ele.role === decoded.role)
-                if (findUserRole) {
-                    navigate(findUserRole.url)
-                }
+          const response = await PostApi(Apis.non_auth.login, formdata)
+          if (response.status === 200) {
+            Cookies.set(CookieName, response.token)
+            successMessage(response.msg)
+            const decoded = decodeToken(response.token)
+            const findUserRole = UserRole.find((ele) => ele.role === decoded.role)
+            if (findUserRole) {
+              navigate(findUserRole.url)
             }
-            else {
-                errorMessage(response.msg)
-            }
+          }
+          else {
+            errorMessage(response.msg)
+          }
         }
         catch (error) {
-            return errorMessage(error.message)
+          return errorMessage(error.message)
         }
         finally {
-            setLoading(false)
+          setLoading(false)
         }
-    }
+      }
+    
+
+      const BankIcon = openbanks ? GoChevronUp : GoChevronDown
     return (
-        <div className='bg-gradient-to-tr from-sec  to-primary h-screen overflow-x-hidden flex items-center justify-center'>
-            <div className="w-[90%] mx-auto max-w-xl bg-white backdrop-blur-sm p-5 relative rounded-lg mt-10 lg:mt-20">
+        <div className="">
+            <div className="flex items-center justify-between">
+                <div className="sans text-[16px] leading-[23px] font-bold">Login to Retail Online Banking</div>
+                <div onClick={() => setLogin(false)} className="flex items-center gap-1 hover:text-primary cursor-pointer">
+                    <MdClose />
+                    <div className="underline lite text-sm ">Close</div>
+                </div>
+            </div>
+            <form onSubmit={LoginAcc} className="mt-5 flex items-start gap-5 flex-col">
+                <div className="flex items-start flex-col gap-2 w-full">
+                    <div className="sans text-[15px] leading-[17px] font-bold">User:</div>
+                    <input name="username" value={forms.username} onChange={handleChange} type="text" className="w-full border border-dark h-12 rounded-full pl-2 outline-none" />
+                </div>
+                <div className="flex items-start flex-col gap-2 w-full">
+                    <div className="sans text-[15px] leading-[17px] font-bold">Password:</div>
+                    <input name="password" value={forms.password} onChange={handleChange} type="password" className="w-full border border-dark h-12 rounded-full pl-2 outline-none" />
+                </div>
+                <button className="py-3 sans text-[20px] leading-[20px] rounded-full w-full text-center bg-primary text-white">Login</button>
+            </form>
 
-                {loading &&
-                    <div className="absolute top-1/2 left-1/2 -translate-x-1/2">
-                        <Loader />
+            <div className="mt-5 flex items-start flex-col gap-1 text-dark">
+                <Link to={`/signup`} className="sans text-[15px] leading-[18px] underline">First time user? Enroll now!</Link>
+                <div className="sans text-[15px] leading-[18px] underline">Forgot User ID?</div>
+                <div className="sans text-[15px] leading-[18px] underline">Forgot Password?</div>
+            </div>
+            <hr className="mt-5 w-full border-gray-400 border" />
+            <div className="sans mt-2 text-[16px] leading-[23px] font-bold">Online Services</div>
+
+            <div className="flex mt-2 w-full items-center justify-between gap-5">
+                <div className="w-2/3 relative">
+                    <div className="w-full flex items-center justify-between px-2 border">
+                        <div className="w-[75%] py-2 text-[12px] capitalize leading-[23px] sans border-r-2 border-r-slate">{banks}</div>
+                        <div onClick={() => setOpenBanks(prev => !prev)} className="w-[25%] cursor-pointer flex items-center justify-center">
+                            <BankIcon className="text-3xl text-primary " />
+                        </div>
                     </div>
-                }
-                {!login ? <div>
-                    <div className="text-3xl lg:text-4xl font-bold text-sec">Login Account</div>
-                    <form onSubmit={LoginAcc} className='mt-5 flex items-start gap-4 flex-col'>
-                        <FormComponent formtype="email" name={`email`} value={forms.email} onchange={handleChange} placeholder="Email Address" />
-                        <FormComponent formtype="password" name={`password`} value={forms.password} onchange={handleChange} placeholder="Password" />
-                        <div className="grid grid-cols-2 gap-4 items-center mb-3">
-
-                            <div className="text-right">
-                                <Link to="/forgot-password" className='text-primary font-semibold'>Forgot Password?</Link>
+                    {openbanks &&
+                        <div className="w-full absolute top-12 z-50 py- bg-white">
+                            <div className="w-full flex items-start gap-1 flex-col ">
+                                {bankings.map((bank, _) => {
+                                    return (
+                                        <div onClick={() => selectBank(bank)} key={_} className="text-[13px] capitalize cursor-pointer pl-3 w-full hover:bg-red-600 hover:text-white leading-[23px]">{bank}</div>
+                                    )
+                                })}
                             </div>
                         </div>
-                        <ButtonComponent bg={`bg-sec text-white h-12`} title={loading ? "...Logging in" : "Login Account"} />
-                        <div className="text-zinc-500 mt-5 text-center ">Don't have an account? <Link to="/signup" className='text-sec font-semibold'>Create Account</Link> </div>
-                        <div className="text-zinc-500 mt-3 text-center"><Link to="/" className='text-sec font-semibold'>Go back home</Link> </div>
-                    </form>
-                </div> :
-                    <div className="flex items-start flex-col gap-5">
-                        <div className="">Site Maintenance Notice</div>
+                    }
+                </div>
+                <div className="w-1/3 rounded-full  hover:border-primary hover:border-2">
+                    <div className="w-full h-full text-center py-2 cursor-pointer rounded-full text-white bg-primary hover:bg-white hover:text-primary">Ok</div>
+                </div>
 
-                        <div className="font-bold">Dear User,</div>
 
-                        <div className="">
-                        Our website is currently undergoing scheduled maintenance to improve your experience. During this time, some services may be temporarily unavailable. We apologize for any inconvenience and appreciate your patience as we work to enhance our platform.
-                        </div>
-
-                        <div className="">
-                        Estimated Downtime:  <span className='font-bold'>November 9th, 2:00 AM to November 11th at 6:00 AM UTC</span> <br />
-                        We’ll Be Back Shortly!
-                        </div>
-
-                        <div className="">
-                        Thank you for your understanding and support. If you have any urgent inquiries, please contact us at support@pinerockcreditunion.com.
-                        </div>
-
-                        <div className="">Best regards, 
-                        <span className='font-bold'>Pinerockcredit Union IT/Support Team</span></div>
-
-                        <Link to={`/`} className="underline text-primary">Go back home</Link>
-                    </div>
-                }
             </div>
         </div>
     )

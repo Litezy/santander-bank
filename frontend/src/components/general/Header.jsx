@@ -9,6 +9,14 @@ import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
+import { MdClose } from "react-icons/md";
+import { Link, useLocation } from "react-router-dom";
+import { GoChevronDown, GoChevronUp } from "react-icons/go";
+import { CookieName, errorMessage, successMessage, UserRole } from "utils/functions";
+import Cookies from "js-cookie";
+import { Apis, PostApi } from "services/Api";
+import { decodeToken } from "react-jwt";
+import Login from "forms/Login";
 
 
 const Header = () => {
@@ -18,9 +26,16 @@ const Header = () => {
   const [sub, setSub] = useState([]);
   const [selected, setSelected] = useState(null);
   const [showSmall, setShowSmall] = useState(false)
+  const [findatm, setFindAtm] = useState(false)
+  const [login, setLogin] = useState(false)
+  const [openbanks, setOpenBanks] = useState(false)
+  
 
 
 
+  
+
+  
 
   const chooseDrop = (type, val, subs) => {
     if (dropdown.status && dropdown?.type === type) {
@@ -39,14 +54,17 @@ const Header = () => {
     // console.log(dropdown)
   }
 
-  const chooseSmall = (type,sub)=>{
-     if(sub.length > 0){
+  const chooseSmall = (type, sub) => {
+    if (sub.length > 0) {
       setSub(sub)
-      setDropdown({...dropdown,status:true})
-     }
+      setDropdown({ ...dropdown, status: true })
+    }
   }
   const Icon = showSmall ? MdOutlineClose : FaBars
+ 
 
+
+  
   return (
     <div className="w-full relative">
       <div className={`w-[95%] hidden lg:block mx-auto gradient-box pb-5 pt-20 px-5 `}>
@@ -92,13 +110,29 @@ const Header = () => {
             </div>
           </div>
 
-          <div className="flex items-center gap-6">
-            <FaLocationDot className="text-primary text-xl cursor-pointer" />
-            <div className="px-8 py-2 rounded-full bg-primary">
-              <button className="text-white text-xl sans font-normal">Login</button>
+          <div className="flex items-center justify-end gap-6  w-[25%]">
+            <div className="flex items-center justify-end relative gap-2 w-full">
+              <div
+                className={`absolute right-0 text-sm transform transition-transform duration-500 ease-in-out 
+                ${findatm ? '-translate-x-8 opacity-100' : 'translate-x-full opacity-0'}`}
+              >
+                Find a Branch/ATM
+              </div>
+              <div onMouseOver={() => setFindAtm(true)} onMouseLeave={() => setFindAtm(false)} className="cursor-pointer">
+                <FaLocationDot className={`text-primary text-xl `} />
+              </div>
             </div>
+            <Link onClick={() => setLogin(prev => !prev)} className="px-8 py-3 cursor-pointer rounded-full text-white text-xl sans font-normal bg-primary">
+              Login
+            </Link>
           </div>
         </div>
+
+        {login &&
+        <div className="w-[22rem] h-[84dvh] bg-white top-[8.5rem] right-20 absolute z-50 py-8 px-4">
+          <Login openbanks={openbanks} setOpenBanks={setOpenBanks} setLogin={setLogin}/>
+        </div>
+         }
 
         {dropdown.status &&
           <div className="flex   flex-col pt-10 items-start gap-1">
@@ -120,7 +154,14 @@ const Header = () => {
         <div className="">
           <img src={logo} className="w-[10rem] " alt="logo" />
         </div>
-        <div className="text-primary lite">Login</div>
+        <Link onClick={() => setLogin(prev => !prev)} className=" cursor-pointer text-primary lite">Login</Link>
+
+        {login &&
+        <div className="w-[22rem] right-0 h-[84dvh] bg-white top-[1.5rem]  absolute z-50 py-8 px-4">
+          <Login openbanks={openbanks} setOpenBanks={setOpenBanks} setLogin={setLogin}/>
+        </div>
+         }
+
 
         {showSmall &&
           <div className="w-full  max-h-[90dvh] overflow-auto  py-2 left-0 h-fit bg-white z-50 absolute top-16">
@@ -139,9 +180,9 @@ const Header = () => {
                       className={`text-sm cursor-pointer border-t-2 px-4 ${active === item.title && 'font-bold text-base py-2 text-primary'}  border-t-slate w-full py-1 `} >
                       <div className={`${item.title === active && dropdown.status ? 'flex items-center ' : ''}`}>
                         {item.title === active && dropdown.status &&
-                          <div onClick={()=> setDropdown({
+                          <div onClick={() => setDropdown({
                             ...dropdown,
-                            status:false
+                            status: false
                           })} className=""><IoMdArrowDropleft className="text-primary font-bold text-3xl" /></div>
                         }
                         {item.title}
@@ -153,9 +194,9 @@ const Header = () => {
                           {item.types.map((type, typeIndex) => {
                             return (
                               <>
-                                <div onClick={() => chooseSmall(type.type,type.subs)} key={typeIndex} className="flex items-center w-full justify-between">
+                                <div onClick={() => chooseSmall(type.type, type.subs)} key={typeIndex} className="flex items-center w-full justify-between">
                                   <div className={` text-sm  hover:font-semibold cursor-pointer`}>{type.type}</div>
-                                  {type.subs.length > 0 && !dropdown.status  &&
+                                  {type.subs.length > 0 && !dropdown.status &&
                                     <div className="text-3xl font-bold cursor-pointer"> <IoMdArrowDropright /></div>
                                   }
                                 </div>
