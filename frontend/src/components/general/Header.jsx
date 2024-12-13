@@ -122,7 +122,7 @@ const Header = () => {
                 <FaLocationDot className={`text-primary text-xl `} />
               </div>
             </div>
-            <Link onClick={() => setLogin(prev => !prev)} className="px-8 py-3 cursor-pointer rounded-full text-white text-xl sans font-normal bg-primary">
+            <Link onClick={() => setLogin(prev => !prev)} className="px-5 py-1 cursor-pointer rounded-full text-white text-xl sans font-normal bg-primary">
               Login
             </Link>
           </div>
