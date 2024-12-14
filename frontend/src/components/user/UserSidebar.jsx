@@ -95,34 +95,34 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
             setIsRotating(false)
         }
     }, [dispatch]);
-    const fetchCurrency = async () =>{
-        try {
-            const response = await axios.get(`https://restcountries.com/v3.1/name/${profile?.country}`);
-            if (response.data && response.data.length > 0) {
-             if(profile?.country === 'china'){
-                const countryData = response.data[2];
-                const currencySymbol = Object.values(countryData.currencies)[0].symbol;
-                dispatch(dispatchNewCurr(currencySymbol))
-                // console.log(currencySymbol)
-             }else{
-                const countryData = response.data[0];
-                const currencySymbol = Object.values(countryData.currencies)[0].symbol;
-                dispatch(dispatchNewCurr(currencySymbol))
-                console.log(currencySymbol)
-             }
-            } else {
-              console.error('Unexpected response format:', response);
-            }
-          } catch (apiError) {
-            console.error('Error fetching currency:', apiError);
-          }
-    }
+    // const fetchCurrency = async () =>{
+    //     try {
+    //         const response = await axios.get(`https://restcountries.com/v3.1/name/${profile?.country}`);
+    //         if (response.data && response.data.length > 0) {
+    //          if(profile?.country === 'china'){
+    //             const countryData = response.data[2];
+    //             const currencySymbol = Object.values(countryData.currencies)[0].symbol;
+    //             dispatch(dispatchNewCurr(currencySymbol))
+    //             // console.log(currencySymbol)
+    //          }else{
+    //             const countryData = response.data[0];
+    //             const currencySymbol = Object.values(countryData.currencies)[0].symbol;
+    //             dispatch(dispatchNewCurr(currencySymbol))
+    //             console.log(currencySymbol)
+    //          }
+    //         } else {
+    //           console.error('Unexpected response format:', response);
+    //         }
+    //       } catch (apiError) {
+    //         console.error('Error fetching currency:', apiError);
+    //       }
+    // }
 
-   const newCurr = useSelector((state) =>state.profile.newCurr)
+//    const newCurr = useSelector((state) =>state.profile.newCurr)
 
-    useEffect(()=>{
-          if(newCurr === null ) { fetchCurrency()}
-    },[newCurr])
+    // useEffect(()=>{
+    //       if(newCurr === null ) { fetchCurrency()}
+    // },[newCurr])
 
 
     useEffect(() => {
@@ -169,29 +169,29 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
                         </div>
                     </ModalLayout>
                 }
-                <div className="bg-col rounded-lg p-3 flex flex-col items-center justify-center gap-3 mt-6 mb-5">
-                    <div className="py-3 px-3.5 rounded-full text-white bg-gradient-to-tr from-primary to-sec w-fit h-fit uppercase">{firstChar}{lastChar}</div>
+                <div className="bg-white rounded-lg lite p-3 flex flex-col items-center justify-center gap-3 mt-6 mb-5">
+                    <div className="py-3 px-3.5 rounded-full text-white bg-primary  w-fit h-fit uppercase">{firstChar}{lastChar}</div>
                     <div className="flex items-center gap-2">
-                        <div className="text-white text-center capitalize text-sm">{profile?.firstname} {profile?.lastname}</div>
+                        <div className="text-col text-center font-bold capitalize text-sm">{profile?.firstname} {profile?.lastname}</div>
                         {profile?.kyc === 'verified' && <div className=""> <MdVerified className='text-primary text-lg' /></div>}
                     </div>
-                    <div className="text-white items-center gap-2 font-bold text-xl flex justify-center">
-                        <div onClick={fetchCurrency} className="">
+                    <div className="text-dark items-center gap-2 font-bold text-xl flex justify-center">
+                        <div  className="">
                             <FiRefreshCcw className={`text-sm cursor-pointer ${isRotating ? 'rotating' : ''}`} />
                         </div>
-                        <div className="flex items-center ">
-                            <span>{profile?.currency === '?' ? newCurr : currency}</span>
+                        <div className="flex items-center gap-2 ">
+                            <span>{currency}</span>
                             <span>{hide ? '***' : profile?.balance?.toLocaleString()}</span>
                         </div>
                         <IoEyeOutline onClick={() => setHide(prev => !prev)} className='text-sm self-center ml-2 cursor-pointer' />
                     </div>
                 </div>
-                <div ref={containerRef} className={` ${viewall ? ' transition-all delay-500 h-[30rem]' : 'h-30rem'} scroll w-full overflow-y-auto overflow-x-hidden flex items-start  flex-col`}>
+                <div ref={containerRef} className={` ${viewall ? ' transition-all delay-500 h-[30rem]' : 'h-30rem'} scroll w-full overflow-y-auto overflow-x-hidden lite flex items-start  flex-col`}>
                     {SideLinks.map((item, index) => (
                         <Link to={item.url}
                             key={index}
                             onClick={closeDiv}
-                            className={`text-sm rounded-lg w-full hover:scale-10 text-slate-200 hover:text-orange-200 ${item.url === location.pathname ? 'bg-col' : ''} hover:translate-x-2 px-3 mb-3 py-2 font-semibold capitalize transition-all`}>
+                            className={`text-sm rounded-lg w-full hover:scale-10 text-slate-200 hover:text-orange-200 ${item.url === location.pathname ? 'bg-white text-primary' : ''} hover:translate-x-2 px-3 mb-3 py-2 font-semibold capitalize transition-all`}>
                             {item.path}
                         </Link>
                     ))}
@@ -199,7 +199,7 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
                     {TicketFolder.map((item, index) => (
                         <div key={index}
                             onClick={() => setViewAll(prev => !prev)}
-                            className={`text-sm mb-2 cursor-pointer  w-full hover:scale-10 flex items-center justify-between text-slate-200 hover:text-orange-200 ${viewall ? 'bg-col rounded-md' : ''} px-3  py-2 font-semibold capitalize transition-all`}>
+                            className={`text-sm mb-2 cursor-pointer  w-full hover:scale-10 flex items-center justify-between text-slate-200 hover:text-orange-200 ${viewall ? 'bg-white text-primary rounded-md' : ''} px-3  py-2 font-semibold capitalize transition-all`}>
                             <div className="">{item.name}</div>
                             <div className="animate-bounce"> {item.icon} </div>
 
@@ -210,7 +210,7 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
                             to={`/user/tickets/status/${item.url}`}
                             onClick={closeUp}
                             key={index}
-                            className={`text-sm rounded-lg  first:mt-2 w-full hover:scale-10 text-slate-200 hover:text-orange-200 ${`/user/tickets/status/${item.url}` === location.pathname ? 'bg-col' : ''} hover:translate-x-2 px-3 mb-3 py-2 font-semibold capitalize transition-all`}>
+                            className={`text-sm rounded-lg  first:mt-2 w-full hover:scale-10 text-slate-200 hover:text-orange-200 ${`/user/tickets/status/${item.url}` === location.pathname ? 'bg-white text-primary' : ''} hover:translate-x-2 px-3 mb-3 py-2 font-semibold capitalize transition-all`}>
                             {item.path}
                         </Link>
                     ))}
@@ -218,7 +218,7 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
                     <div className="flex flex-col w-full mt- mb-3">
                         {SideLinks2.map((item, index) => (
                             <Link to={item.url} onClick={() => logOut(item)} key={index}
-                                className={`text-sm rounded-lg flex items-center justify-between  hover:scale-10 text-slate-200 ${item.url === location.pathname ? 'bg-col' : ''} hover:text-orange-200 px-3 mb-2 py-2 hover:translate-x-2 font-semibold capitalize transition-all`}>
+                                className={`text-sm rounded-lg flex items-center justify-between  hover:scale-10 text-slate-200 ${item.url === location.pathname ? 'bg-white text-primary' : ''} hover:text-orange-200 px-3 mb-2 py-2 hover:translate-x-2 font-semibold capitalize transition-all`}>
                                 <div className="">{item.path}</div>
                                 <div className=""></div>
                             </Link>
@@ -227,9 +227,9 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
                 </div>
                 
             </div>
-            <div className="mt-2 w-11/12 mx-auto flex items-center justify-center flex-col   ">
-                <div className="font-bold text-white"><span className='text-col'>Pine<span>rock</span></span> Credit Union</div>
-                <div className="text-white">All rights reserved, 2024</div>
+            <div className="mt-2 w-11/12 mx-auto flex items-start justify-center flex-col   ">
+                <div className="font-bold text-white sans">Santander Bank</div>
+                <div className="text-white text-[15px] leading-[18px]">All rights reserved, 2024</div>
                 </div>
         </div>
     )

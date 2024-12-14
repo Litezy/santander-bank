@@ -518,7 +518,7 @@ const Savings = () => {
                 </ModalLayout>
             }
 
-            <div className="flex flex-col shadow-md md:mt-5 items-start bg-sec text-white justify-center h-fit py-5 mb-10 gap-10 ">
+            <div className="flex flex-col shadow-md md:mt-5 items-start bg-primary text-white justify-center h-fit py-5 mb-10 gap-10 ">
                 <div className="md:w-3/4 w-full mx-auto h-full py-2 flex items-center justify-center flex-col px-3 rounded-lg  cursor-pointer">
                     <div className="text-lg font-semibold text-center lg:mb-3">Four (4) important steps to take in order to complete your deposit</div>
                     {steps.map((ele, i) => (

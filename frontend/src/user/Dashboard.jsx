@@ -116,11 +116,11 @@ export default function Dashboard() {
                                         <div className="border-b py-1 text-zinc-500 text-right">Savings name: <span className='text-xl font-bold text-primary capitalize'>{selectSaving.name}</span></div>
                                         <div className="border-b py-1">
                                             <div className=" text-right">Savings Goal</div>
-                                            <div className="font-bold text-right text-primary">{profile?.currency === '?' ? newCurr : currency }{selectSaving.goal.toLocaleString()}</div>
+                                            <div className="font-bold text-right text-primary">{currency }{selectSaving.goal.toLocaleString()}</div>
                                         </div>
                                         <div className="border-b py-1">
                                             <div className=" text-right">Currently Saved</div>
-                                            <div className="font-bold text-right text-primary">{profile?.currency === '?' ? newCurr : currency }{selectSaving.current.toLocaleString()}</div>
+                                            <div className="font-bold text-right text-primary">{currency }{selectSaving.current.toLocaleString()}</div>
                                         </div>
                                         <div className="border-b py-1">
                                             <div className=" text-right">Last Saved</div>
@@ -139,15 +139,15 @@ export default function Dashboard() {
 
 
                 <div className="flex flex-col lg:flex-row w-full gap-10 mt-8 items-center">
-                    <div className="bg-sec lg:w-[65%] px-3 w-full   lg:py-10 py-5  rounded-lg flex items-center justify-center flex-col">
+                    <div className="bg-col lg:w-[65%] px-3 w-full   lg:py-10 py-5  rounded-lg flex items-center justify-center flex-col">
                         <div className="flex items-center flex-col gap-2 ">
                             <div className="flex items-center gap-3 text-white text-sm font-extralight">
-                                <GoShieldLock className='text-green-400 text-xl ' />
+                                <GoShieldLock className='text-sec text-xl ' />
                                 <div className="text-base">Available Balance</div>
                                 <Icon onClick={() => setShow(prev => !prev)} className='text-xl cursor-pointer' />
                             </div>
                             <div className="flex  items-start">
-                                <div className="text-slate-200 lg:text-4xl text-3xl  font-bold">{profile?.currency === '?' ? newCurr : currency}</div>
+                                <div className="text-white lg:text-4xl text-3xl  font-bold">{currency}</div>
                                 <div className="font-bold lg:text-4xl text-3xl text-white">{show ? profile?.balance?.toLocaleString() :
                                     <>
                                         <div className="flex">
@@ -166,7 +166,7 @@ export default function Dashboard() {
                             </div>
                             <div className="flex items-start flex-col">
                                 <div className=" text-sm">Account Number:</div>
-                                <div onClick={copyToClip} className="flex  items-center font-semibold gap-2  text-lg"> {profile?.account_number} <IoCopy className='text-sky-200 text-lg cursor-pointer' /> </div>
+                                <div onClick={copyToClip} className="flex  items-center font-semibold gap-2  text-lg"> {profile?.account_number} <IoCopy className='text-white text-lg cursor-pointer' /> </div>
                             </div>
                         </div>
                     </div>
@@ -195,7 +195,7 @@ export default function Dashboard() {
                     <div className="flex items-center justify-between my-6">
                         <div className="font-semibold text-2xl lg:text-3xl">Latest Savings Goal</div>
                         <div className="">
-                            <Link to="/user/savings" className='text-blue-600'>View all</Link>
+                            <Link to="/user/savings" className='text-col'>View all</Link>
                         </div>
                     </div>
                     <div className={`grid grid-cols-1 ${userSavings.length === 0 ? 'lg:grid-cols-1' : 'lg:grid-cols-2'} gap-5 lg:gap-10`}>
@@ -268,7 +268,7 @@ export default function Dashboard() {
                 <div className="flex items-center justify-between my-6">
                     <div className="font-semibold text-2xl lg:text-3xl">Latest Transactions</div>
                     <div className="">
-                        <Link to="/user/transactions" className='text-blue-600'>View all</Link>
+                        <Link to="/user/transactions" className='text-col'>View all</Link>
                     </div>
                 </div>
 

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import logo from "../../assets/santander/logo.png";
-import hero from "../../assets/santander/hero.png";
 import { headers } from "./utils";
 import { FaLocationDot } from "react-icons/fa6";
 import { IoMdArrowDropdown } from "react-icons/io";
@@ -9,14 +8,9 @@ import { IoMdArrowDropright } from "react-icons/io";
 import { IoMdArrowDropup } from "react-icons/io";
 import { FaBars } from "react-icons/fa";
 import { MdOutlineClose } from "react-icons/md";
-import { MdClose } from "react-icons/md";
-import { Link, useLocation } from "react-router-dom";
-import { GoChevronDown, GoChevronUp } from "react-icons/go";
-import { CookieName, errorMessage, successMessage, UserRole } from "utils/functions";
-import Cookies from "js-cookie";
-import { Apis, PostApi } from "services/Api";
-import { decodeToken } from "react-jwt";
+import { Link,} from "react-router-dom";
 import Login from "forms/Login";
+
 
 
 const Header = () => {
@@ -249,22 +243,7 @@ const Header = () => {
 
 
 
-      <div className={`w-[95%] relative  mx-auto `}>
-        <div className={` flex flex-col lg:flex-row gap-10 lg:gap-0 items-center justify-between w-full`}>
-
-          <div className="w-full flex ml-16 items-start flex-col lg:w-1/2 gap-3">
-            <div className="text-[35px] lg:text-[54px]  lite text-[#727272] leading-none">The best financial <br /> tools and advice for <br /> every need.</div>
-            <div className="text-base w-8/12 font-normal">Simple and secure personal banking available in person, online, or on your device.</div>
-            <div className="">
-              <button className="bg-primary text-white text-base py-2 px-8 rounded-full">Choose your checking account</button>
-            </div>
-          </div>
-          <div className="w-full lg:w-1/2">
-            <img src={hero} className="" alt="hero image" />
-
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };

@@ -352,7 +352,7 @@ input[type=number] {
 .scroll::-webkit-scrollbar-thumb{
   width: 5px;
   border-radius: 50px;
-  background-color: #0c182f;
+  background-color: #dc2626;
 
 }
 .scroll{

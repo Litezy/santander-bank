@@ -252,7 +252,7 @@ const CardComponent = () => {
                 <div className="flex items-center flex-col lg:flex-row justify-between gap-5 lg:gap-10">
                     {new Array(2).fill(0).map((item, i) => {
                         return (
-                            <div key={i} className={`h-60 w-full  bg-gradient-to-tr from-primary to-sec rounded-lg py-6 px-5`}>
+                            <div key={i} className={`h-60 w-full  bg-col rounded-lg py-6 px-5`}>
                                 <div className="flex gap-4 flex-col text-white h-full justify-between">
                                     <div className="w-16 p-3 bg-white h-12 rounded-md ml-auto mr-2">
                                     </div>
@@ -272,8 +272,11 @@ const CardComponent = () => {
                 </div>
 
             }
+            <div className="flex flex-col lg:flex-row lg:gap-2 items-start gap">
             <div className="font-light mt-1">* max of two credit/debit cards</div>
+            <div className="font-light mt-1">* contact customer support to create your card</div>
 
+            </div>
 
         </div>
     )

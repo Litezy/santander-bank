@@ -24,9 +24,9 @@ const newCurr = useSelector((state) => state.profile.newCurr)
             <div className="lg:text-2xl text-base">Available Balance</div>
             <Icon onClick={() => setBal(prev => !prev)} className='text-2xl cursor-pointer' />
           </div>
-          <div className="flex mt-3 self-center ">
-            <div className="text-slate-200 text-2xl self-end font-bold">{profile?.currency === '?' ? newCurr : currency}</div>
-            <div className="font-bold text-2xl text-white">{bal ? profile?.balance?.toLocaleString() :
+          <div className="flex mt-3 self-center gap-1 text-white ">
+            <div className="text-slate-200 text-2xl self-end font-bold">{ currency}</div>
+            <div className="font-bold text-2xl ">{bal ? profile?.balance?.toLocaleString() :
               <>
                 <div className="flex">
                   {new Array(5).fill(0).map((item, i) => (

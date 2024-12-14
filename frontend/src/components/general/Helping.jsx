@@ -5,6 +5,8 @@ import { IoIosArrowDroprightCircle } from "react-icons/io";
 import firstgif from '../../assets/santander/banking.gif'
 import podcast from '../../assets/santander/podcast.jpg'
 import calendar from '../../assets/santander/calendar.png'
+import hero from "../../assets/santander/hero.png";
+
 
 const Helping = () => {
   const [active, setActive] = useState(null)
@@ -28,6 +30,22 @@ const Helping = () => {
 
   return (
     <div className="w-full">
+      <div className={`w-[95%] relative  mx-auto `}>
+        <div className={` flex flex-col lg:flex-row gap-10 lg:gap-0 items-center justify-between w-full`}>
+
+          <div className="w-full flex ml-16 items-start flex-col lg:w-1/2 gap-3">
+            <div className="text-[35px] lg:text-[54px]  lite text-[#727272] leading-none">The best financial <br /> tools and advice for <br /> every need.</div>
+            <div className="text-base w-8/12 font-normal">Simple and secure personal banking available in person, online, or on your device.</div>
+            <div className="">
+              <button className="bg-primary text-white text-base py-2 px-8 rounded-full">Choose your checking account</button>
+            </div>
+          </div>
+          <div className="w-full lg:w-1/2">
+            <img src={hero} className="" alt="hero image" />
+
+          </div>
+        </div>
+      </div>
       <div className=" w-full bg-slate flex items-center justify-center px-10 py-20">
         <div className="w-full flex items-center flex-col  gap-10">
           <div className="mb-4 text-center text-3xl lite">Helping people bank <span className='font-bold border-b-2 border-b-primary '>{texts[currentIndex]}</span></div>

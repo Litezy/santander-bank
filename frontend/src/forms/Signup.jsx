@@ -13,6 +13,7 @@ export default function Signup() {
     const [forms, setForms] = useState({
         firstname: '',
         lastname: '',
+        username: '',
         email: '',
         gender: '',
         country: '',
@@ -63,6 +64,7 @@ export default function Signup() {
         const formdata = {
             firstname: forms.firstname,
             lastname: forms.lastname,
+            username: forms.username,
             email: forms.email,
             gender: forms.gender,
             country: forms.country,
@@ -101,13 +103,22 @@ export default function Signup() {
 
 
                     <div className="grid grid-cols-7 gap-1 lg:gap-5">
-                        <div className="col-span-5">
+                        <div className="col-span-7">
                             <Forminput
                                 name={'lastname'}
                                 value={forms.lastname}
                                 onClick={() => setSubmit(false)}
                                 onChange={handleForms} formtype="text" label="Last Name"
                                 isError={submit && !forms.lastname ? "Last name is missing" : ""}
+                            />
+                        </div>
+                        <div className="col-span-5">
+                            <Forminput
+                                name={'username'}
+                                value={forms.username}
+                                onClick={() => setSubmit(false)}
+                                onChange={handleForms} formtype="text" label="Username"
+                                isError={submit && !forms.username ? "Username name is missing" : ""}
                             />
                         </div>
 

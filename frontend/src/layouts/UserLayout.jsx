@@ -100,7 +100,7 @@ export default function UserLayout({ children }) {
                         </div>
                     </div>
                     <div className="h-[91.1dvh] flex items-center w-4/5 max-w-xl mx-auto justify-center pb-10 overflow-y-auto">
-                        <Box sx={{ width: '100%', }} className="bg-[#021526]">
+                        <Box sx={{ width: '100%', }} className="bg-[#ec0000]">
                             <LinearProgress />
                         </Box>
                     </div>
@@ -128,7 +128,7 @@ export default function UserLayout({ children }) {
                                         </div>
                                     }
                                 </div>
-                                <div className="font-semibold text-base ">Hi, Welcome back</div>
+                                <div className="font-semibold san text-[16px] leading-[18px] text-base ">Hi, Welcome back</div>
                             </div>
                             <div className="w-1/2 ">
                                 <div className="text-2xl hidden  lg:flex items-center justify-end gap-5">

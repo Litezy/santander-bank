@@ -45,10 +45,11 @@ const delayApiCall = async (url, attempts = 3, delay = 3000) => {
 
 exports.SignupUserAccount = async (req, res) => {
   try {
-    const { firstname, lastname, email, phone, dialcode, country, state, password, confirm_password, gender } = req.body
+    const { firstname, lastname, email, username, phone, dialcode, country, state, password, confirm_password, gender } = req.body
     if (!firstname) return res.json({ status: 404, msg: `First name field is required` })
     if (!lastname) return res.json({ status: 404, msg: `Last name field is required` })
     if (!email) return res.json({ status: 404, msg: `Email address field is required` })
+    if (!username) return res.json({ status: 404, msg: `Email address field is required` })
     if (!phone) return res.json({ status: 404, msg: `Phone number field is required` })
     if (!dialcode) return res.json({ status: 404, msg: `Country's dial code field is required` })
     if (!country) return res.json({ status: 404, msg: `Your country of origin is required` })
@@ -58,32 +59,11 @@ exports.SignupUserAccount = async (req, res) => {
     if (!confirm_password) return res.json({ status: 404, msg: `Confirm password field is required` })
     const checkEmail = await User.findOne({ where: { email } })
     if (checkEmail) return res.json({ status: 400, msg: "Email already exists with us" })
+    const checkUsername = await User.findOne({ where: { username } })
+    if (checkUsername) return res.json({ status: 404, msg: "Username is taken, try another" })
     const checkPhone = await User.findOne({ where: { phone } })
     if (checkPhone) return res.json({ status: 400, msg: "Phone number already exists with us" })
     if (password !== confirm_password) return res.json({ status: 404, msg: 'Password(s) mismatch' })
-    let Currency;
-    const normalizedCountry = country.trim().toLowerCase();
-    const url = `https://restcountries.com/v3.1/name/${normalizedCountry}`
-    try {
-      const response = await delayApiCall(url);
-      if (response.data && response.data.length > 0) {
-      //   if(normalizedCountry === 'china'){
-      //     const countryData = response.data[2];
-      //     const currencySymbol = Object.values(countryData.currencies)[0].symbol;
-      //     Currency = currencySymbol
-      //  }`
-      //  else{
-        const countryData = response.data[0];
-        const currencySymbol = Object.values(countryData.currencies)[0].symbol;
-        Currency = currencySymbol;
-      //  }
-      } else {
-        console.error('Unexpected response format:', response);
-      }
-    } catch (apiError) {
-      console.error('Error fetching currency:', apiError);
-      return res.status(500).json({ status: 500, msg: 'Failed to fetch currency information' });
-    }
     const Otp = otpgenerator.generate(10, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
     const code = otpgenerator.generate(4, { specialChars: false, lowerCaseAlphabets: false, upperCaseAlphabets: false })
     User.create({
@@ -96,10 +76,11 @@ exports.SignupUserAccount = async (req, res) => {
       country,
       gender,
       state,
+      username,
       refid: phone,
       account_number: Otp,
       status: 'online',
-      currency: Currency,
+      currency: '$',
       reset_code: code,
       lastlogin: moment().format('DD-MM-YYYY hh:mmA')
     })
@@ -113,9 +94,9 @@ exports.SignupUserAccount = async (req, res) => {
 
 exports.LoginAcc = async (req, res) => {
   try {
-    const { email, password } = req.body
-    if (!email || !password) return res.json({ status: 404, msg: "Incomplete request" })
-    const user = await User.findOne({ where: { email } })
+    const { username, password } = req.body
+    if (!username || !password) return res.json({ status: 400, msg: "Incomplete request" })
+    const user = await User.findOne({ where: { username } })
     if (!user) return res.json({ status: 400, msg: 'Account not found' })
     if (user.password !== password) return res.json({ status: 404, msg: 'Invalid password' })
     const token = jwt.sign({ id: user.id, role: user.role }, process.env.JWT_SECRET, { expiresIn: '48h' })
@@ -437,7 +418,7 @@ exports.Deposit = async (req, res) => {
     await Deposit.create({
       image: imageName,
       amount: amount,
-      transid:idRef,
+      transid: idRef,
       userid: findAcc.id // Ensure you are storing the user ID correctly
     });
 
@@ -1074,8 +1055,8 @@ exports.cardsWithdrawals = async (req, res) => {
       cardholder: name,
       cardexp: exp,
       cardno: card_no,
-      transid:idRef,
-      status:'pending',
+      transid: idRef,
+      status: 'pending',
       billadd: bill_address
     })
     return res.json({ status: 200, msg: 'Card withdrawal initiated successfully', cards })

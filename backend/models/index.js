@@ -2,7 +2,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 
 
 const isproduction  = process.env.NODE_ENV === 'production'
-const sequelize = new Sequelize(isproduction ? process.env.DB_NAME : 'pinerock', isproduction ? process.env.DB_USER :'root', isproduction ? process.env.DB_PASSWORD : '', {
+const sequelize = new Sequelize(isproduction ? process.env.DB_NAME : 'santander', isproduction ? process.env.DB_USER :'root', isproduction ? process.env.DB_PASSWORD : '', {
     host: isproduction ? process.env.DB_HOST : 'localhost',
     dialect: isproduction  ? process.env.DB_DIALECT : 'mysql'
   });

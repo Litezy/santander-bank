@@ -64,7 +64,7 @@ export default function Login({openbanks,setOpenBanks,setLogin }) {
 
       const BankIcon = openbanks ? GoChevronUp : GoChevronDown
     return (
-        <div className="">
+        <div className="relative w-full">
             <div className="flex items-center justify-between">
                 <div className="sans text-[16px] leading-[23px] font-bold">Login to Retail Online Banking</div>
                 <div onClick={() => setLogin(false)} className="flex items-center gap-1 hover:text-primary cursor-pointer">
@@ -72,6 +72,12 @@ export default function Login({openbanks,setOpenBanks,setLogin }) {
                     <div className="underline lite text-sm ">Close</div>
                 </div>
             </div>
+
+            {loading &&
+            <div className="absolute left-1/2 -translate-x-1/2 top-1/3">
+                <Loader/>
+            </div>
+            }
             <form onSubmit={LoginAcc} className="mt-5 flex items-start gap-5 flex-col">
                 <div className="flex items-start flex-col gap-2 w-full">
                     <div className="sans text-[15px] leading-[17px] font-bold">User:</div>
@@ -81,7 +87,7 @@ export default function Login({openbanks,setOpenBanks,setLogin }) {
                     <div className="sans text-[15px] leading-[17px] font-bold">Password:</div>
                     <input name="password" value={forms.password} onChange={handleChange} type="password" className="w-full border border-dark h-12 rounded-full pl-2 outline-none" />
                 </div>
-                <button className="py-3 sans text-[20px] leading-[20px] rounded-full w-full text-center bg-primary text-white">Login</button>
+                <button disabled={loading ? true :false} className="py-3 sans text-[20px] leading-[20px] rounded-full w-full text-center bg-primary text-white">{loading ? 'Logging in' :'Login'}</button>
             </form>
 
             <div className="mt-5 flex items-start flex-col gap-1 text-dark">
