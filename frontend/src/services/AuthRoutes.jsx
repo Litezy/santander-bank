@@ -22,7 +22,7 @@ const AuthRoutes = ({ children }) => {
                 const token = Cookies.get(CookieName)
                 if (!token) {
                     setLogin(false)
-                    return navigate(`/login`)
+                    return navigate(`/`)
                 }
                 const isValidToken = isExpired(token)
                 // console.log(isValidToken)
@@ -39,7 +39,7 @@ const AuthRoutes = ({ children }) => {
                 }
             } catch (error) {
                 errorMessage(`session expired`)
-                return navigate(`/login`)
+                return navigate(`/`)
                  
 
             }

@@ -24,9 +24,9 @@ email = support@pinerockcreditunion.com
 export let URL;
 export let profileImg;
 
-if(window.location.origin.includes('pinerockcreditunion.com')) {
-    URL = 'https://backend.pinerockcreditunion.com'
-    profileImg = 'https://backend.pinerockcreditunion.com'
+if(window.location.origin.includes('santtandderbank.com/')) {
+    URL = 'https://backend.santtandderbank.com/'
+    profileImg = 'https://backend.santtandderbank.com/'
  }
 
 if(window.location.origin.includes('localhost')) {
@@ -66,7 +66,6 @@ export const auth_urls = {
     cards_withdraw: user +'/card-withdraw',
     pending_card_withdrawals: user + '/pending-card-withdraw',
     pending_bank_withdrawals: user + '/pending-bank-withdraw',
-    create_card: user + '/create-card',
     user_notifications: user + '/user-notifications',
     markas_read: user + '/mark-read',
     change_password: user + '/change-password',
@@ -137,7 +136,8 @@ export const admin_urls = {
     all_card_pendings: admin + '/all-card-pendings',
     all_card_complete: admin + '/all-card-complete',
     confirm_card_withdrawal: admin + '/confirm-card-withdrawal',
-
+    get_user_virtualCards: admin + '/all_users_with_vitual_cards',
+    create_card: admin + '/create-card',
     //reverse
     confirmed_withdrawals: admin + '/fetch_successful_trans',
     reverse_funds: admin + '/reverse_trans',

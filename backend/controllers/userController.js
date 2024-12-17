@@ -725,31 +725,7 @@ exports.getUserSavings = async (req, res) => {
 }
 
 //user loans and cards
-exports.createCards = async (req, res) => {
-  try {
-    const { type, card_no, name, cvv, exp, bill_address } = req.body
-    if (!type || !card_no || !name || !cvv || !exp || !bill_address) return res.json({ status: 404, msg: 'Incomplete request' })
-    const findAcc = await User.findOne({ where: { id: req.user } })
-    if (!findAcc) return res.json({ status: 404, msg: 'Account not found' })
-    const cards = await Card.create({
-      name,
-      card_no,
-      cvv,
-      exp,
-      type,
-      userid: findAcc.id,
-      bill_address
-    })
-    await Notify.create({
-      type: 'Card',
-      message: `You have successfully added your ${type} card to your account.`,
-      user: findAcc.id
-    })
-    return res.json({ status: 200, msg: 'Card created successfully', cards })
-  } catch (error) {
-    ServerError(res, error)
-  }
-}
+
 
 
 exports.getAllUserCards = async (req, res) => {

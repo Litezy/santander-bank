@@ -60,7 +60,7 @@ export default function VerifyEmailAccount() {
                 const res = await PostApi(Apis.non_auth.verify_email, formdata)
                 if (res.status === 200) {
                     successMessage(res.msg)
-                    navigate(`/login`)
+                    navigate(`/`)
                 } else {
                     errorMessage(res.msg)
                 }

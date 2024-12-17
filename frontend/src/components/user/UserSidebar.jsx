@@ -67,7 +67,7 @@ export default function UserSidebar({ setOpenSide, smallView = false }) {
             if (response.status === 200) {
                 successMessage(response.msg)
                 Cookies.remove(CookieName)
-                navigate('/login')
+                navigate('/')
             } else {
                 errorMessage(response.msg)
             }

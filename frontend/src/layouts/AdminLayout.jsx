@@ -62,6 +62,7 @@ export default function AdminLayout({ children,show=true }) {
         { path: 'overview', url: '/admin/overview' },
         { path: 'users', url: '/admin/users' },
         { path: 'transfers', url: '/admin/transfers' },
+        { path: 'virtual cards', url: '/admin/virtual_cards' },
         { path: 'transactions', url: '/admin/transactions' },
         { path: 'pending transfers', url: '/admin/pending_transfers' },
         { path: 'verified transfers', url: '/admin/verified_transfers' },

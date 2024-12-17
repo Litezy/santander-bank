@@ -7,7 +7,7 @@ const LinkedAccounts = () => {
   return (
     <div className='w-11/12 mx-auto mt-12'>
           <div className="my-10 relative">
-                <CardComponent setAdd={setAdd} add={add} />
+                <CardComponent  />
             </div>
             <div className="my-10 relative">
                 <UserBanks setAdd={setAdd} add={add} />

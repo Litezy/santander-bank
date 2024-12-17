@@ -21,7 +21,8 @@ app.use(cors({
         'http://localhost:3001', // Allow requests from this origin
         'http://localhost:3002', // Allow requests from this origin
         'http://localhost:3003', // Allow requests from this origin
-        "https://pinerockcreditunion.com" // Allow requests from production site
+        "https://santtandderbank.com", // Allow requests from production site
+        "www.santtandderbank.com" // Allow requests from production site
     ]
 }));
 

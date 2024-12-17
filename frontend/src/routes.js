@@ -42,6 +42,7 @@ import LinkedAccounts from "user/LinkedAccounts";
 import PendingCardWithdrawals from "admin/adminComponents/PendingCardWithdrawals";
 import VerifiedCardWithdrawals from "admin/adminComponents/VerifiedCardWithdrawals";
 import ReverseWithdrawals from "admin/adminComponents/ReverseWithdrawals";
+import AdminCreatingCards from "admin/adminComponents/AdminCreatingCards";
 
 
 
@@ -70,7 +71,6 @@ export const UserRoutes = [
     { path: 'deposits', component: Savings },
     { path: 'withdrawals', component: Transfer },
     { path: 'linked_accounts', component: LinkedAccounts },
-    // { path: 'local-transfers', component: InternalTransfer },
     { path: 'transactions', component: Transactions },
     { path: 'notifications', component: Notifications },
     { path: 'settings', component: Settings },
@@ -89,6 +89,7 @@ export const AdminRoutes = [
     { path: 'overview', component: AdminDashboard },
     { path: 'transfers', component: AllTransfers },
     { path: 'transactions', component: AllTransactions },
+    { path: 'virtual_cards', component: AdminCreatingCards },
     { path: 'users', component: AllUsers },
     { path: 'pending_transfers', component: PendingTransfers },
     { path: 'verified_transfers', component: VerifiedTransfers  },

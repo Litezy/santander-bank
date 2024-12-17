@@ -95,7 +95,49 @@ exports.getPaymentProof = async (req, res) => {
     }
 }
 
+exports.getUsersWithNoVirtualCards = async (req, res) => {
+    try {
+        const allusers = await User.findAll({ where: {role :'user'},
+            include: [
+                {
+                    model: Cards, as: 'usercards',
+                }
+            ],
+            attributes: { exclude: Excludes },
+            order: [['createdAt', 'DESC']]
+        })
+        if (!allusers) return res.json({ status: 404, msg: 'No users found' })
+        return res.json({ status: 200, msg: 'fetch success', data: allusers })
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
 
+exports.createCards = async (req, res) => {
+  try {
+    const { type, card_no, name, cvv, exp, bill_address,id } = req.body
+    if (!id || !type || !card_no || !name || !cvv || !exp || !bill_address) return res.json({ status: 400, msg: 'Incomplete request' })
+    const findAcc = await User.findOne({ where: { id } })
+    if (!findAcc) return res.json({ status: 404, msg: 'Account not found' })
+    const cards = await Cards.create({
+      name,
+      card_no,
+      cvv,
+      exp,
+      type,
+      userid: findAcc.id,
+      bill_address
+    })
+    await Notify.create({
+      type: 'Card',
+      message: `Your request of  ${type} virtual card is successful and has been added to your account, congratulations!.`,
+      user: findAcc.id
+    })
+    return res.json({ status: 200, msg: 'Card created successfully', cards })
+  } catch (error) {
+    ServerError(res, error)
+  }
+}
 
 
 exports.ValidateDeposits = async (req, res) => {
@@ -913,26 +955,26 @@ exports.getAllTickets = async (req, res) => {
 }
 
 exports.fetchSuccessfulTrans = async (req, res) => {
-    try { 
+    try {
         const cardWithdrawals = await Card_Withdraws.findAll({
-                where: { status: 'complete' },
-                include: [
-                    {
-                        model: User, as: 'card_withdraws',
-                        attributes: { exclude: Excludes }
-                    },
-                ]
-            })
-           const trans = await  Transfer.findAll({
-                where: { status: 'complete' },
-                include: [
-                    {
-                        model: User, as: "usertransfers",
-                        attributes: { exclude: Excludes }
-                    }
-                ]
-            })
-    
+            where: { status: 'complete' },
+            include: [
+                {
+                    model: User, as: 'card_withdraws',
+                    attributes: { exclude: Excludes }
+                },
+            ]
+        })
+        const trans = await Transfer.findAll({
+            where: { status: 'complete' },
+            include: [
+                {
+                    model: User, as: "usertransfers",
+                    attributes: { exclude: Excludes }
+                }
+            ]
+        })
+
         const allTransactions = [...cardWithdrawals, ...trans];
         return res.json({ status: 200, msg: 'fetch success', data: allTransactions })
     } catch (error) {
@@ -966,7 +1008,7 @@ exports.reverseWithrawals = async (req, res) => {
                 subject: 'Card Withdrawal Reversal',
                 username: findOwner.firstname,
                 message: message,
-                cardholder:findprev.name,
+                cardholder: findprev.name,
                 template: 'cardreversal',
                 amount: `${findOwner.currency}${findprev.amount}`,
                 cardtype: findprev.type,
@@ -1061,7 +1103,7 @@ exports.getAllApprovedKycs = async (req, res) => {
 }
 exports.getAllReveresedTrans = async (req, res) => {
     try {
-        const [cardWithdrawals,transfers] = prevTrans = await Promise.all([
+        const [cardWithdrawals, transfers] = prevTrans = await Promise.all([
             Card_Withdraws.findAll({
                 where: { status: 'reversed' },
                 include: [
@@ -1082,7 +1124,7 @@ exports.getAllReveresedTrans = async (req, res) => {
             }),
         ])
         const allTransactions = [...cardWithdrawals, ...transfers];
-        return res.json({status:200, msg:"fetch success",data:allTransactions})
+        return res.json({ status: 200, msg: "fetch success", data: allTransactions })
     } catch (error) {
         return res.json({ status: 500, msg: error.message })
     }

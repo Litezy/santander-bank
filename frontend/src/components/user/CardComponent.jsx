@@ -1,39 +1,15 @@
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import mastercardimg from '../../assets/dashboard/mastercard.png'
 import visacardimg from '../../assets/dashboard/visa.png'
-import FormComponent from 'utils/FormComponent'
-import { errorMessage, successMessage } from 'utils/functions'
-import { FaAsterisk } from "react-icons/fa";
-import Loader from 'utils/Loader'
-import ModalLayout from 'utils/ModalLayout'
-import { Apis, GetApi, PostApi } from 'services/Api'
-import Formbutton from 'utils/Formbutton'
+import { errorMessage } from 'utils/functions'
+import { Apis, GetApi } from 'services/Api'
 import chip from 'assets/chip-sm.png'
 import ButtonComponent from 'utils/ButtonComponent'
 import { useLocation } from 'react-router-dom'
 
 const CardComponent = () => {
-
-    const refdiv = useRef(null)
-    const [loading, setLoading] = useState(false)
-    const [confirm, setConfirm] = useState(false)
     const [add, setAdd] = useState(false)
-
-    const [cards, setCards] = useState(
-        {
-            type: '',
-            card_no: '',
-            cvv: '',
-            card_name: '',
-            bill_address: '',
-            exp: ''
-        },
-
-    )
-
-
     const [allcards, setAllcards] = useState([])
-
     const fetchUserCards = useCallback(async () => {
         try {
             const response = await GetApi(Apis.auth.all_cards)
@@ -48,158 +24,33 @@ const CardComponent = () => {
         fetchUserCards()
     }, [fetchUserCards])
 
-    const handleChange = (e) => {
-        setCards({
-            ...cards,
-            [e.target.name]: e.target.value
-        })
-    }
-
-
-
-    useEffect(() => {
-        if (refdiv) {
-            window.addEventListener('click', e => {
-                if (refdiv.current !== null && !refdiv.current.contains(e.target)) {
-                    setAdd(false)
-                }
-            }, true)
-        }
-    }, [])
-
-    const handleCardNumberChange = (event) => {
-        let value = event.target.value.replace(/\D/g, ''); // Remove all non-digit characters
-        value = value.substring(0, 16); // Limit to 16 digits
-        const formattedValue = value.match(/.{1,4}/g)?.join('-') || value; // Insert hyphens every 4 digits
-        setCards({
-            ...cards,
-            card_no: formattedValue
-        });
-    };
-
-    const handleCvv = (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        value = value.substring(0, 3)
-        setCards({
-            ...cards,
-            cvv: value
-        })
-    }
-    const handleCardDate = (e) => {
-        let value = e.target.value.replace(/\D/g, '');
-        value = value.substring(0, 4)
-        const formattedValue = value.match(/.{1,2}/g)?.join('/') || value;
-        setCards({
-            ...cards,
-            exp: formattedValue
-        })
-    }
-
-    const addCardsArr = async (e) => {
-        e.preventDefault()
-        if (!cards.type) return errorMessage('Card type is required')
-        if (!cards.card_name) return errorMessage('Card name is required')
-        if (!cards.card_no) return errorMessage('Card number is required')
-        if (!cards.cvv) return errorMessage('Card cvv is required')
-        if (!cards.exp) return errorMessage('Card expiry date is required')
-        if (!cards.bill_address) return errorMessage('Card expiry date is required')
-        const formdata = {
-            name: cards.card_name,
-            card_no: cards.card_no,
-            cvv: cards.cvv,
-            exp: cards.exp,
-            bill_address: cards.bill_address,
-            type: cards.type
-        }
-        setLoading(true)
-        try {
-            const response = await PostApi(Apis.auth.create_card, formdata)
-            if (response.status === 200) {
-                setCards({ card_name: '', card_no: '', cvv: '', exp: '', type: '' })
-                successMessage(response.msg)
-                fetchUserCards()
-                setAdd(false)
-            } else {
-                errorMessage(response.msg)
-            }
-        } catch (error) {
-            errorMessage(error.message)
-            console.log(error)
-        } finally {
-            setLoading(false)
-        }
-
-    }
-
+    const refdiv = useRef(null)
     const location = useLocation()
     const [comp, setComp] = useState(false)
     useEffect(() => {
         if (location.pathname.includes(`/user/linked_accounts`)) return setComp(true)
     }, [])
 
+    useEffect(() => {
+
+        const clickOut = (e) => {
+            if(refdiv){
+                if (refdiv.current !== null && !refdiv.current.contains(e.target)) {
+                    setAdd(false)
+                }
+            }
+        }
+        window.addEventListener('click', clickOut, true)
+
+        return ()=>{
+            window.removeEventListener('click', clickOut, true)
+        }
+
+    }, [])
+
     return (
         <div className='w-full'>
-            {add &&
-                <>
-                    <ModalLayout setModal={setAdd} clas={`lg:w-[60%] w-11/12 mx-auto`}>
-                        <div ref={refdiv} className={`w-full relative mx-auto rounded-lg bg-white  py-6 px-5 `}>
-                            {loading &&
-                                <div className=" absolute h-full items-center flex justify-center z-50 w-full">
-                                    <Loader />
-                                </div>
-                            }
-                            <div className="text-xl font-semibold text-balance">Enter Card Details</div>
-                            <div className="my-5 flex flex-col items-start gap-5">
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Card type:</div>
-                                    <div className="w-1/2 ">
-                                        <label className='w-1/2 ' >
-                                            <select name="type" value={cards.type} onChange={handleChange} className='w-full outline-none h-14 border px-5 py-1 rounded-md' id="">
-                                                <option value="">Select Card Type</option>
-                                                <option value="visa">Visa</option>
-                                                <option value="mastercard">Mastercard</option>
-                                            </select>
 
-                                        </label>
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Card No:</div>
-                                    <div className="w-1/2">
-                                        <FormComponent formtype={'text'} value={cards.card_no} onchange={handleCardNumberChange} />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Card Holder's Name:</div>
-                                    <div className="w-1/2">
-                                        <FormComponent formtype={'text'} name={`card_name`} value={cards.card_name} onchange={handleChange} />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Card CVV:</div>
-
-                                    <div className="w-1/4">
-                                        <FormComponent formtype={'cvv'} name={`cvv`} value={cards.cvv} onchange={handleCvv} />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Card Exp:</div>
-                                    <div className="w-1/4">
-                                        <FormComponent formtype={'text'} name={`exp`} value={cards.exp} onchange={handleCardDate} />
-                                    </div>
-                                </div>
-                                <div className="flex items-center justify-between w-full">
-                                    <div className="text-lg ">Billing Address:</div>
-                                    <div className="w-3/4">
-                                        <FormComponent formtype={'text'} name={`bill_address`} value={cards.bill_address} onchange={handleChange} />
-                                    </div>
-                                </div>
-                            </div>
-                            <button disabled={loading ? true : false} onClick={addCardsArr} className=' h-12 w-full bg-gradient-to-tr from-primary to-sec  text-white rounded-lg'>Add Card</button>
-                        </div>
-                    </ModalLayout>
-                </>
-            }
 
             <div className="flex mb-2 w-full items-center justify-between">
                 <div className=" text-xl font-semibold">My Cards</div>
@@ -208,11 +59,22 @@ const CardComponent = () => {
                     <div className="w-fit ">
                         <ButtonComponent
                             onclick={() => setAdd(true)}
-                            title="Add New Card"
-                            bg={`text-white bg-gradient-to-tr px-3 from-primary text-sm to-sec h-12`} />
+                            title="Request A Virtual Card"
+                            bg={`text-white bg-primary px-3  text-sm to-sec h-12`} />
                     </div>
                 }
             </div>
+
+            {add &&
+                <div ref={refdiv} className="absolute top-1/2 left-1/2 bg-white -translate-x-1/2 w-1/2 px-4 py-4 rounded-md">
+                    <div className="w-full h-full flex items-center justify-center">
+                        <div className="flex items-center gap-3 flex-col">
+                        <div className="lite text-[18px] leading-[23px]">Please contact customer support to get a virtual card</div>
+                          <button onClick={()=> setAdd(false)} className='px-3 w-1/2 mx-auto py-2 rounded-xl bg-primary text-white'>Ok</button>
+                        </div>
+                    </div>
+                </div>
+            }
             {Array.isArray(allcards) && allcards.length > 0 ? <div className=" mx-auto grid grid-cols-1 md:grid-cols-2 gap-5">
                 {allcards.map((item, i) => {
                     return (
@@ -273,8 +135,8 @@ const CardComponent = () => {
 
             }
             <div className="flex flex-col lg:flex-row lg:gap-2 items-start gap">
-            <div className="font-light mt-1">* max of two credit/debit cards</div>
-            <div className="font-light mt-1">* contact customer support to create your card</div>
+                <div className="font-light mt-1">* max of two credit/debit cards</div>
+                <div className="font-light mt-1">* contact customer support to create your card</div>
 
             </div>
 

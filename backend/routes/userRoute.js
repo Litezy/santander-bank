@@ -37,7 +37,7 @@ router.post('/withdraw-savings', userMiddleware, WithdrawGoal)
 router.get('/save-history', userMiddleware, getCompletedSavings)
 
 //loans/cards/banks/transfers
-router.post('/create-card', userMiddleware, createCards)
+
 router.post('/card-withdraw', userMiddleware, cardsWithdrawals)
 router.get('/pending-card-withdraw', userMiddleware, getUserCardWithdrawals)
 router.get('/pending-bank-withdraw', userMiddleware, getUserBankWithdrawals)

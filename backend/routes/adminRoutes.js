@@ -1,5 +1,5 @@
 const { adminPrivacy } = require("../auth/UserAuth")
-const { getAllUsers, getAllDeposits, getPaymentProof, getAllPlans, getAllTrans, getUserBanks, getUserCards, CreateUser, ValidateDeposits, InitiateDeposits, FindUserEmail, InitiateWithdraw, AlterTransaDate, addAdminBank, unhideBank, getAdminBanks, createVerification,  getAllTransfers, DeclineDeposits, getSettledDeposits, removeAdminBank, getAllEmailSubs, getAllContacts, getAllVerifications, sendPaymentOtp, confirmTransfer, getSingleTransfer, getAllActiveTickets, getAllClosedTickets,getKYCUsers, getAllPendingUserKYCS, getAllVerifiedUserKYCS, getOneUserKyc, ApproveKYC, OverturnKyc, getAllPendingReq, getAllTerminatedSavings, getAllCompletedSavings, getDeposits, getAllTickets, getCompletedTransfers, getAllApprovedKycs, getAllpendingCardWithdrawals, getAllCompleteCardWithdrawals, confirmCardWithdrawal, fetchSuccessfulTrans, reverseWithrawals, getAllReveresedTrans } = require("../controllers/adminControllers")
+const { getAllUsers, getAllDeposits, getPaymentProof, getAllPlans, getAllTrans, getUserBanks, getUserCards, CreateUser, ValidateDeposits, InitiateDeposits, FindUserEmail, InitiateWithdraw, AlterTransaDate, addAdminBank, unhideBank, getAdminBanks, createVerification,  getAllTransfers, DeclineDeposits, getSettledDeposits, removeAdminBank, getAllEmailSubs, getAllContacts, getAllVerifications, sendPaymentOtp, confirmTransfer, getSingleTransfer, getAllActiveTickets, getAllClosedTickets,getKYCUsers, getAllPendingUserKYCS, getAllVerifiedUserKYCS, getOneUserKyc, ApproveKYC, OverturnKyc, getAllPendingReq, getAllTerminatedSavings, getAllCompletedSavings, getDeposits, getAllTickets, getCompletedTransfers, getAllApprovedKycs, getAllpendingCardWithdrawals, getAllCompleteCardWithdrawals, confirmCardWithdrawal, fetchSuccessfulTrans, reverseWithrawals, getAllReveresedTrans, getUsersWithNoVirtualCards, createCards } = require("../controllers/adminControllers")
 const { createMessageAdmin, getOneTicketMessagesAdmin, closeTicket } = require("../controllers/ticketsControllers")
 
 const router = require(`express`).Router()
@@ -40,7 +40,8 @@ router.get('/all-contacts', adminPrivacy, getAllContacts)
 router.get('/all-card-pendings', adminPrivacy, getAllpendingCardWithdrawals)
 router.get('/all-card-complete', adminPrivacy, getAllCompleteCardWithdrawals)
 router.post('/confirm-card-withdrawal', adminPrivacy, confirmCardWithdrawal)
-
+router.get('/all_users_with_vitual_cards', adminPrivacy, getUsersWithNoVirtualCards)
+router.post('/create-card', adminPrivacy, createCards)
 router.get('/fetch_successful_trans', adminPrivacy, fetchSuccessfulTrans)
 router.post('/reverse_trans', adminPrivacy, reverseWithrawals)
 router.get('/allreversed',adminPrivacy, getAllReveresedTrans)

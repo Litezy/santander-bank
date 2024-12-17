@@ -14,6 +14,7 @@ const AdminLinks = [
     { path: 'users', url: '/admin/users' },
     { path: 'transfers', url: '/admin/transfers' },
     { path: 'transactions', url: '/admin/transactions' },
+    { path: 'virtual cards', url: '/admin/virtual_cards' },
     { path: 'pending bank withdrawals', url: '/admin/pending_transfers' },
     { path: 'verified bank withdrawals', url: '/admin/verified_transfers' },
     { path: 'pending card withdrawals', url: '/admin/pending_card_withdrawals' },
@@ -61,7 +62,7 @@ export default function AdminSideBar({setSide}) {
             if (response.status === 200) {
                 successMessage(response.msg)
                 Cookies.remove(CookieName)
-                navigate('/login')
+                navigate('/')
             } else {
                 errorMessage(response.msg)
             }
