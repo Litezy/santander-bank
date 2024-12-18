@@ -9,7 +9,8 @@ import { MdOutlinePlayCircle } from "react-icons/md";
 const SantanderFreedom = () => {
   return (
     <div className='w-full'>
-      <div className="w-full bg-slate pt-10 h-[450dvh] lg:h-[175dvh]  px-5 lg:px-10 text-[#555555]">
+      <div className="w-full bg-slate pt-10 h-fit lg:h-[175dvh]  px-5 lg:px-10 text-[#555555]">
+      {/* <div className="w-full bg-slate pt-10 h-[450dvh] lg:h-[175dvh]  px-5 lg:px-10 text-[#555555]"> */}
         <div className="w-11/12 lg:w-10/12 mx-auto flex-col lg:flex-row flex items-center gap-10 ">
           <div className="flex w-full lg:w-2/3 flex-col gap-10">
             <div className="lite text-[54px] leading-[58px] ">Santander mobile banking for anywhere convenience</div>

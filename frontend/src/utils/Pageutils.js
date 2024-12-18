@@ -61,7 +61,7 @@ export const HeroSlides = [
     {
         tip:'instant money transfer',
         title:'Digital banking made for digital users',
-        content:'Pinerock credit union is an all-in one mobile banking app chock full of all the tools, tips, and tricks you need to take contol of your financies.',
+        content:'Santtandderbank is an all-in one mobile banking app chock full of all the tools, tips, and tricks you need to take contol of your financies.',
         img:heroimg,
     },
     {
@@ -132,7 +132,7 @@ export const privacyPolicy = [
         number: '1',
         desc: [
             {
-                info: 'Welcome to Pinerock Credit Union. We are committed to protecting your personal data and ensuring your privacy. This policy outlines how we collect, use, and safeguard your information when you use our services.'
+                info: 'Welcome to Santtandderbank. We are committed to protecting your personal data and ensuring your privacy. This policy outlines how we collect, use, and safeguard your information when you use our services.'
             }
         ]
     },
@@ -261,7 +261,7 @@ export const termsOfUse = [
         number: '1',
         desc: [
             {
-                info: "By accessing or using Pinerock Credit Union's website and services, you agree to comply with and be bound by these Terms of Use. If you do not agree to these terms, please do not use our services."
+                info: "By accessing or using Santtandderbank's website and services, you agree to comply with and be bound by these Terms of Use. If you do not agree to these terms, please do not use our services."
             }
         ]
     },
@@ -270,7 +270,7 @@ export const termsOfUse = [
         number: '2',
         desc: [
             {
-                info: `<span style="font-weight:bold;">Eligibility:</span>  By accessing or using Pinerock Credit Union's website and services, you agree to comply with and be bound by these Terms of Use. If you do not agree to these terms, please do not use our services.`
+                info: `<span style="font-weight:bold;">Eligibility:</span>  By accessing or using Santtandderbank's website and services, you agree to comply with and be bound by these Terms of Use. If you do not agree to these terms, please do not use our services.`
             },
             {
                 info: `<span style="font-weight:bold;">Account Security:</span>  You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account.`
@@ -285,7 +285,7 @@ export const termsOfUse = [
         number: '3',
         desc: [
             {
-                info: "Pinerock Credit Union offers a range of financial services, including savings accounts, money transfers, transaction processing, and goal-based savings features. The specific services available to you may vary based on your location and account type."
+                info: "Santtandderbank offers a range of financial services, including savings accounts, money transfers, transaction processing, and goal-based savings features. The specific services available to you may vary based on your location and account type."
             }
         ]
     },
@@ -294,7 +294,7 @@ export const termsOfUse = [
         number: '4',
         desc: [
             {
-                info: "Pinerock Credit Union offers a range of financial services, including savings accounts, money transfers, transaction processing, and goal-based savings features. The specific services available to you may vary based on your location and account type."
+                info: "Santtandderbank offers a range of financial services, including savings accounts, money transfers, transaction processing, and goal-based savings features. The specific services available to you may vary based on your location and account type."
             }
         ]
     },
@@ -349,7 +349,7 @@ export const termsOfUse = [
         number: '9',
         desc: [
             {
-                info: "All content, trademarks, and intellectual property on our website and within our services are the property of Pinerock Credit Union or its licensors. You may not use, copy, or distribute any of our intellectual property without our prior written consent."
+                info: "All content, trademarks, and intellectual property on our website and within our services are the property of Santtandderbank or its licensors. You may not use, copy, or distribute any of our intellectual property without our prior written consent."
             }
         ]
     },
