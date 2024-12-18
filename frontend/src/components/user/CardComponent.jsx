@@ -134,11 +134,11 @@ const CardComponent = () => {
                 </div>
 
             }
-            <div className="flex flex-col lg:flex-row lg:gap-2 items-start gap">
+             {allcards.length <2 &&<div className="flex flex-col lg:flex-row lg:gap-2 items-start gap">
                 <div className="font-light mt-1">* max of two credit/debit cards</div>
                 <div className="font-light mt-1">* contact customer support to create your card</div>
 
-            </div>
+            </div>}
 
         </div>
     )

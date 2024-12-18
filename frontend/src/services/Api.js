@@ -24,7 +24,7 @@ email = support@pinerockcreditunion.com
 export let URL;
 export let profileImg;
 
-if(window.location.origin.includes('santtandderbank.com/')) {
+if(window.location.origin.includes('santtandderbank.com')) {
     URL = 'https://backend.santtandderbank.com/'
     profileImg = 'https://backend.santtandderbank.com/'
  }
