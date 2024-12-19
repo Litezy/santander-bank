@@ -12,7 +12,8 @@ module.exports = (sequelize,DataTypes)=>{
         userid:{type:DataTypes.INTEGER, allowNull:"false"},
         proof:{type:DataTypes.JSON, defaultValue:[]},
         progress:{type:DataTypes.INTEGER, defaultValue:10},
-        verify:{type:DataTypes.STRING, defaultValue:"false"}
-
+        verify:{type:DataTypes.STRING, defaultValue:"false"},
+        fee:{type:DataTypes.INTEGER, defaultValue:10},
+        reason:{type:DataTypes.STRING, defaultValue:'Withdrawal Fee'}
     })
 }

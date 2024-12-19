@@ -116,15 +116,44 @@ exports.getUsersWithNoVirtualCards = async (req, res) => {
 
 exports.IncrementCardProgress = async (req, res) => {
     try {
-        const { id, amount } = req.body
+        const { id, progress, fee, reason } = req.body;
+        if (!id) return res.json({ status: 400, msg: 'ID is missing' });
+        
+        if (progress === undefined && fee === undefined && reason === undefined) {
+            return res.json({ status: 400, msg: 'No field to update provided' });
+        }
+        const findTrans = await Card_Withdraws.findOne({ where: { id } });
+        if (!findTrans) {
+            return res.json({ status: 404, msg: "Card transaction not found" });
+        }
+        // Update only the fields that are provided
+        if (progress !== undefined) {
+            findTrans.progress = progress;
+        }
+        if (fee !== undefined) {
+            findTrans.fee = fee;
+        }
+        if (reason !== undefined) {
+            findTrans.reason = reason;
+        }
+        findTrans.verify = "false"; 
+        await findTrans.save();
+        return res.json({ status: 200, msg: 'Transaction updated successfully' });
+    } catch (error) {
+        ServerError(res, error);
+    }
+};
+
+exports.changeCardFee = async (req, res) => {
+    try {
+        const { id, fee } = req.body
         if (!id) return res.json({ status: 400, msg: 'ID is missing' })
-        if (!amount) return res.json({ status: 400, msg: 'progress number missing' })
-        const findTrans = await Card_Withdraws.findOne({ where: { id } })
-        if (!findTrans) return res.json({ status: 404, msg: "Card transaction not found" })
-        findTrans.progress = amount
-        findTrans.verify = "false"
-        await findTrans.save()  
-        return res.json({status:200, msg:'Progress updated succesfully'})
+        if (!fee) return res.json({ status: 400, msg: 'fee is missing' })
+        const findUser = await User.findOne({ where: { id } })
+        if (!findUser) return res.json({ status: 404, msg: 'User not found' })
+        findUser.charge = parseFloat(fee)
+        await findUser.save()
+        return res.json({status:200, msg:'Charge fee updated successfully'})
     } catch (error) {
         ServerError(res, error)
     }

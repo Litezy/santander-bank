@@ -102,6 +102,7 @@ const admin_urls = {
     confirm_trans: 'admin/confirm-trans',
     otp: 'admin/otp',
     update_progress: 'admin/update_progress',
+    update_charge_fee: 'admin/update_charge_fee',
     single_trans: 'admin/single-trans',
     pending_transfers : 'admin/all-pending-transfers',
     terminated_savings : 'admin/all-terminated-savings',

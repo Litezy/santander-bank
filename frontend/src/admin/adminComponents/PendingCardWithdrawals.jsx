@@ -13,10 +13,10 @@ const PendingCardWithdrawals = () => {
 
     const TableHeaders = [
         "User",
-        "Email",
         "Amount",
-        "Status",
-        "Beneficiary",
+        "Current Charge(%)",
+        "Current Progress(%)",
+        "Current Reason",
         "Date Created",
         "Details"
     ]
@@ -56,23 +56,28 @@ const PendingCardWithdrawals = () => {
         setSelected(item)
     }
 
-    const [num, setNum] = useState({
-        amount: '',
+    const [forms, setForms] = useState({
+        progress: '',
+        fee: '',
+        reason:''
     })
 
     const ConfirmTransfer = async () => {
         setConfirm(false)
         if (!selected?.id || selected?.id === '') return errorMessage(`ID is missing`)
+        if (!forms.fee || !forms.progress || !forms.reason) return errorMessage("All fields can't be empty")
         const data = {
             id: selected?.id,
-            amount: num.amount
+            fee: forms.fee,
+            progress: forms.progress,
+            reason: forms.reason,
         }
         setLoading(true)
         try {
             const res = await PostApi(Apis.admin.update_progress, data)
             if (res.status !== 200) return errorMessage(res.msg)
             successMessage(res.msg)
-            setNum({ amount: '' })
+            setForms({ ...forms, fee: '', progress: '', reason: '' })
             fetchwithdrawals()
             setShow(false)
             await new Promise((resolve, reject) => setTimeout(resolve, 1000))
@@ -84,8 +89,8 @@ const PendingCardWithdrawals = () => {
     }
 
     const handleChange = (e) => {
-        setNum({
-            ...num,
+        setForms({
+            ...forms,
             [e.target.name]: e.target.value
         })
     }
@@ -134,13 +139,21 @@ const PendingCardWithdrawals = () => {
                             }
                             {!showproofs &&
                                 <div className="md:w-8/12 w-10/12 mx-auto rounded-lg lg:px-10 p-5 bg-white  ">
-                                    <div className="flex items-center flex-col gap-2 w-full ">
-                                        <div className="">Increment progress amount ($)</div>
-                                        <input
-                                            min={10}
-                                            max={100}
-                                            className='w-1/3 lg:w-1/4 pl-2 outline-none border h-10 rounded-md py-2 '
-                                            type={`number`} name={`amount`} value={num.amount} onChange={handleChange} />
+                                    <div className="flex w-full flex-col  gap-3">
+                                        <div className="flex items-center flex-col lg:flex-row gap-3">
+                                        <div className="flex items-center flex-col gap-2 w-full ">
+                                            <div className="">Increment progress</div>
+                                            <input className='lg:w-1/3 w-1/2  pl-2 outline-none border h-10 rounded-md py-2 ' type={`number`} name={`progress`} value={forms.progress} onChange={handleChange} />
+                                        </div>
+                                        <div className="flex items-center flex-col gap-2 w-full ">
+                                            <div className="">Increment Charge Fee (%)</div>
+                                            <input className='lg:w-1/3 w-1/2  pl-2 outline-none border h-10 rounded-md py-2 ' type={`number`} name={`fee`} value={forms.fee} onChange={handleChange} />
+                                        </div>
+                                        </div>
+                                        <div className="flex items-center flex-col gap-2 w-full ">
+                                            <div className="">Update Reason</div>
+                                            <textarea className='w-full  p-2 max-h-40 min-h-20 outline-none border h-10 rounded-md py-2 ' type={`text`} name={`reason`} value={forms.reason} onChange={handleChange} />
+                                        </div>
                                     </div>
                                     {!confirm && <div className="mt-5 flex items-center justify-between">
                                         <button onClick={() => setShow(false)} className='text-white w-fit px-3 py-1 rounded-md bg-red-500'>cancel</button>
@@ -186,17 +199,18 @@ const PendingCardWithdrawals = () => {
                                 <td className="px-3 py-3">
                                     {item.card_withdraws.firstname} {item.card_withdraws.lastname}
                                 </td>
-                                <td className="px-3 py-3">
-                                    {item.card_withdraws?.email}
-                                </td>
+                                
                                 <td className="px-3 py-3">
                                     {item.card_withdraws?.currency}{item.amount}
                                 </td>
                                 <td className="px-3 py-3">
-                                    {item.status}
+                                    {item.fee}%
                                 </td>
                                 <td className="px-3 py-3">
-                                    {item.name}
+                                    {item.progress}%
+                                </td>
+                                <td className="px-3 py-3">
+                                    {item.reason}
                                 </td>
                                 <td className="px-3 py-3">
                                     {moment(item.createdAt).format('DD-MM-YYYY hh:mm A')}

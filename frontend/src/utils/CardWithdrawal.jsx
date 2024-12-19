@@ -3,11 +3,10 @@ import FormComponent from './FormComponent'
 import Loader from './Loader';
 import { Apis, GetApi, PostApi } from 'services/Api';
 import { errorMessage, successMessage } from './functions';
-import { useNavigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { FaEdit, FaPlus } from 'react-icons/fa';
 import Formbutton from './Formbutton';
-import { MdDelete } from "react-icons/md";
+import { dispatchProfile } from 'app/reducer';
 
 const CardWithdrawal = () => {
 
@@ -81,6 +80,16 @@ const CardWithdrawal = () => {
     })
   }
 
+  const dispatch = useDispatch()
+  const fetchUserProfile = useCallback(async () => {
+    try {
+      const response = await GetApi(Apis.auth.profile);
+      if (response.status !== 200) return;
+      dispatch(dispatchProfile(response.data));
+    } catch (error) {
+      errorMessage(`error in fetching profilee`, error.message);
+    }
+  }, [dispatch]);
 
 
 
@@ -114,7 +123,8 @@ const CardWithdrawal = () => {
         setCards({ card_name: '', card_no: '', cvv: '', exp: '', type: '' })
         successMessage(response.msg)
         fetchCardWithdraws()
-        await new Promise((resolve) => setTimeout(resolve, 1000));
+        fetchUserProfile()
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       } else {
         errorMessage(response.msg)
 
@@ -170,11 +180,13 @@ const CardWithdrawal = () => {
       if (res.status !== 200) return errorMessage(res.msg)
       successMessage(res.msg)
       fetchCardWithdraws()
+      fetchUserProfile()
       setProofimg({
         img: '',
         image: null
       })
       setPaid(false)
+      await new Promise((resolve) => setTimeout(resolve, 2000));
     } catch (error) {
       errorMessage(error.message)
     } finally {
@@ -202,10 +214,18 @@ const CardWithdrawal = () => {
                       className={`h-5 rounded-full bg-primary `}></div>
                   </div>
                   <div className="flex items-center gap-1 text-primary">
-                    <div className="">withdrawal in progress</div>
+                    <div className="">withdrawal in progress...</div>
                     <div className="text-center font-medium ">{cardPending[0].progress}%</div>
-
                   </div>
+                  {cardPending[0].verify === "false" && <div className="flex  items-center justify-center flex-col gap-2 w-full">
+                    <div className="text-center text-col underline font-bold">Summary</div>
+                    <div className="flex items-center flex-col justify-between text-sm">
+                      <div className="">Amount Withdrawn: <span>${cardPending[0].amount}</span></div>
+                      <div className="">Reason: <span>{cardPending[0].reason}</span></div>
+                      <div className="">Charge Fee: <span>{cardPending[0].fee}%</span></div>
+                      <div className="">Amount to Pay: <span>${`${(cardPending[0].amount / 100 * cardPending[0]?.fee).toFixed(1)}`}</span></div>
+                    </div>
+                  </div>}
                 </div>
 
               </div>
@@ -288,7 +308,7 @@ const CardWithdrawal = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between w-full">
-                <div className="text-lg ">Charge Fee (10%)</div>
+                <div className="text-lg ">Charge Fee {cardPending[0]?.fee ? `(${cardPending[0]?.fee})%` : '(10%)'}</div>
                 <div className="w-1/4">
                   <input type='text' value={cards.amount ? `$${(parseFloat(cards.amount.replace(/,/g, '')) / 100) * 10}`
                     : '$0'}
