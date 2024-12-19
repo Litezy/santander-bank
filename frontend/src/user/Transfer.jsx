@@ -13,7 +13,7 @@ const Transfer = () => {
   const profile = useSelector((state) => state.profile.profile)
   const currency = useSelector((state) => state.profile.currency)
 
-const newCurr = useSelector((state) => state.profile.newCurr)
+
 
   return (
     <div className='w-full mt-5'>
@@ -39,13 +39,11 @@ const newCurr = useSelector((state) => state.profile.newCurr)
         </div>
 
         <div className="w-11/12 mx-auto  my-5 justify-center flex items-center gap-10">
-        <div onClick={()=> setActive(1)} className={`${active === 1 ? 'bg-col text-white ' : ' bg-white '}  rounded-md cursor-pointer w-1/2 text-center py-2 transition-all delay-50 duration-50`}>Bank Withdrawal</div>
-        <div onClick={()=> setActive(2)}  className={`${active ===2 ? 'bg-col text-white ' : 'bg-white '} rounded-md  transition-all delay-50 duration-50 text-center cursor-pointer w-1/2 py-2 `}>Card Withdrawal</div>
-        </div>
+        <div className={` bg-col text-white   rounded-md cursor-pointer w-1/2 text-center py-2 transition-all delay-50 duration-50`}>Card Withdrawal</div>
        
+        </div>
        <div className="w-full">
-        {active === 1 && <BankWithdrawal/>}
-        {active === 2 && <CardWithdrawal/>}
+       <CardWithdrawal/>
        </div>
        
 

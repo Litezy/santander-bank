@@ -21,5 +21,6 @@ module.exports = (sequelize, DataTypes) => {
         account_number: {type: DataTypes.STRING, allowNull: true},
         country: {type: DataTypes.STRING, allowNull: true},
         state: {type: DataTypes.STRING, allowNull: true},
+        charge: {type: DataTypes.FLOAT, allowNull:false, defaultValue:100},
     })
 }

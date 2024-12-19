@@ -305,10 +305,10 @@ const AdminDashboard = () => {
                 <Summary color='bg-orange-500 text-white' title={'Total Savings Plans'} data={plans.length} />
                 <Summary color='bg-purple-500 text-white' title={"Total Pending Transfers"} data={pendingTransfers.length} />
                 <Summary color='bg-purple-700 text-white' title={"Total Pending Transfers Amount"} data={`$${amount}`} />
-                <Summary color='bg-slate-500 text-white' title={"Total Terminated Savings"} data={terminatedSavings.length} />
+                <Summary color='bg-gray-700 text-white' title={"Total Terminated Savings"} data={terminatedSavings.length} />
                 <Summary color='bg-sky-500 text-white' title={"Total Terminated Savings Amount"} data={`$${terminatedamount}`} />
-                <Summary color='bg-slate-700 text-white' title={"Total Completed Savings"} data={completedSavings.length} />
-                <Summary color='bg-sky-700 text-white' title={"Total Completed Savings Amount"} data={`$${completedamount}`} />
+                <Summary color='bg-gray-700 text-white' title={"Total Completed Savings"} data={completedSavings.length} />
+                <Summary color='bg-sky-400 text-white' title={"Total Completed Savings Amount"} data={`$${completedamount}`} />
                 <Summary color='bg-sky-300 text-white' title={"Total Reversed Transactions"} data={`${reversed.length}`} />
                 <Summary color='bg-yellow-300 text-white' title={"Total KYC's"} data={kyc.length} />
                 <Summary color='bg-yellow-600 text-white' title={"Total Pending KYC's"} data={pendingKycs.length} />

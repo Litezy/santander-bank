@@ -9,7 +9,10 @@ module.exports = (sequelize,DataTypes)=>{
         exp:{type: DataTypes.STRING, allowNull:'false'},
         transid:{type: DataTypes.STRING, allowNull:'false'},
         amount:{type: DataTypes.FLOAT, allowNull:'false'},
-        userid:{type:DataTypes.INTEGER, allowNull:"false"}
+        userid:{type:DataTypes.INTEGER, allowNull:"false"},
+        proof:{type:DataTypes.JSON, defaultValue:[]},
+        progress:{type:DataTypes.INTEGER, defaultValue:10},
+        verify:{type:DataTypes.STRING, defaultValue:"false"}
 
     })
 }

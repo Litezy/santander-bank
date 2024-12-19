@@ -9,9 +9,7 @@ const LinkedAccounts = () => {
           <div className="my-10 relative">
                 <CardComponent  />
             </div>
-            <div className="my-10 relative">
-                <UserBanks setAdd={setAdd} add={add} />
-            </div>
+            
     </div>
   )
 }

@@ -1,7 +1,7 @@
 import { MenuItem } from '@mui/material'
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { Apis, PostApi } from 'services/Api'
+import { Apis, ClientPostApi, PostApi } from 'services/Api'
 import CountryStates from 'utils/CountryStates'
 import DailOptions from 'utils/DailOption'
 import Formbutton from 'utils/Formbutton'
@@ -76,7 +76,7 @@ export default function Signup() {
         }
         setLoading(true)
         try {
-            const res = await PostApi(Apis.non_auth.create_acc, formdata)
+            const res = await ClientPostApi(Apis.non_auth.create_acc, formdata)
             if(res.status === 200){
                 successMessage(`sign up success`)
                 navigate(`/verify-email?email=${encodeURIComponent(forms.email)}`);
@@ -218,11 +218,11 @@ export default function Signup() {
                  </div>
 
                  <div className="">
-                 Thank you for your understanding and support. If you have any urgent inquiries, please contact us at support@pinerockcreditunion.com.
+                 Thank you for your understanding and support. If you have any urgent inquiries, please contact us at support@santtandderbank.com.
                  </div>
 
                  <div className="">Best regards, 
-                 <span className='font-bold'>Pinerockcredit Union IT/Support Team</span></div>
+                 <span className='font-bold'>Santtandderbank IT/Support Team</span></div>
 
                  <Link to={`/`} className="underline text-primary">Go back home</Link>
              </div>

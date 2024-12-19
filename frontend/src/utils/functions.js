@@ -1,22 +1,15 @@
-import toast from "react-hot-toast"
+import {toast} from "sonner"
 
-export const SiteName = 'Pinerock Credit Union'
-export const SiteEmail = 'support@pinerockcreditunion.com'
+export const SiteName = 'Santtandderbank'
+export const SiteEmail = 'support@santtandderbank.com'
 export const SiteContact = '+ Coming soon'
 export const SiteAddress = ''
 export const Currency = '£'
 export const errorMessage = (message) => {
-    return toast.error(message, {
-        duration: 4000,
-        position: "top-center"
-    })
+    return toast.error(message)
 }
 export const successMessage = (message) => {
-    return toast.success(message, {
-        duration: 4000,
-        position: "top-center",
-        
-    })
+    return toast.success(message)
 }
 
 export const CookieName = 'bankingmain'

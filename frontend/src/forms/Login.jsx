@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { CookieName, errorMessage, successMessage, UserRole } from 'utils/functions'
 import Cookies from 'js-cookie'
-import { Apis, PostApi } from 'services/Api'
+import { Apis, ClientPostApi, PostApi } from 'services/Api'
 import { decodeToken } from 'react-jwt'
 import Loader from 'utils/Loader'
 import { GoChevronDown, GoChevronUp } from 'react-icons/go'
@@ -39,7 +39,7 @@ export default function Login({openbanks,setOpenBanks,setLogin }) {
         }
         setLoading(true)
         try {
-          const response = await PostApi(Apis.non_auth.login, formdata)
+          const response = await ClientPostApi(Apis.non_auth.login, formdata)
           if (response.status === 200) {
             Cookies.set(CookieName, response.token)
             successMessage(response.msg)

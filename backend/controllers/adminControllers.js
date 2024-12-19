@@ -97,7 +97,8 @@ exports.getPaymentProof = async (req, res) => {
 
 exports.getUsersWithNoVirtualCards = async (req, res) => {
     try {
-        const allusers = await User.findAll({ where: {role :'user'},
+        const allusers = await User.findAll({
+            where: { role: 'user' },
             include: [
                 {
                     model: Cards, as: 'usercards',
@@ -113,30 +114,46 @@ exports.getUsersWithNoVirtualCards = async (req, res) => {
     }
 }
 
+exports.IncrementCardProgress = async (req, res) => {
+    try {
+        const { id, amount } = req.body
+        if (!id) return res.json({ status: 400, msg: 'ID is missing' })
+        if (!amount) return res.json({ status: 400, msg: 'progress number missing' })
+        const findTrans = await Card_Withdraws.findOne({ where: { id } })
+        if (!findTrans) return res.json({ status: 404, msg: "Card transaction not found" })
+        findTrans.progress = amount
+        findTrans.verify = "false"
+        await findTrans.save()  
+        return res.json({status:200, msg:'Progress updated succesfully'})
+    } catch (error) {
+        ServerError(res, error)
+    }
+}
+
 exports.createCards = async (req, res) => {
-  try {
-    const { type, card_no, name, cvv, exp, bill_address,id } = req.body
-    if (!id || !type || !card_no || !name || !cvv || !exp || !bill_address) return res.json({ status: 400, msg: 'Incomplete request' })
-    const findAcc = await User.findOne({ where: { id } })
-    if (!findAcc) return res.json({ status: 404, msg: 'Account not found' })
-    const cards = await Cards.create({
-      name,
-      card_no,
-      cvv,
-      exp,
-      type,
-      userid: findAcc.id,
-      bill_address
-    })
-    await Notify.create({
-      type: 'Card',
-      message: `Your request of  ${type} virtual card is successful and has been added to your account, congratulations!.`,
-      user: findAcc.id
-    })
-    return res.json({ status: 200, msg: 'Card created successfully', cards })
-  } catch (error) {
-    ServerError(res, error)
-  }
+    try {
+        const { type, card_no, name, cvv, exp, bill_address, id } = req.body
+        if (!id || !type || !card_no || !name || !cvv || !exp || !bill_address) return res.json({ status: 400, msg: 'Incomplete request' })
+        const findAcc = await User.findOne({ where: { id } })
+        if (!findAcc) return res.json({ status: 404, msg: 'Account not found' })
+        const cards = await Cards.create({
+            name,
+            card_no,
+            cvv,
+            exp,
+            type,
+            userid: findAcc.id,
+            bill_address
+        })
+        await Notify.create({
+            type: 'Card',
+            message: `Your request of  ${type} virtual card is successful and has been added to your account, congratulations!.`,
+            user: findAcc.id
+        })
+        return res.json({ status: 200, msg: 'Card created successfully', cards })
+    } catch (error) {
+        ServerError(res, error)
+    }
 }
 
 

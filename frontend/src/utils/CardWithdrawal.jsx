@@ -1,14 +1,20 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import FormComponent from './FormComponent'
 import Loader from './Loader';
 import { Apis, GetApi, PostApi } from 'services/Api';
 import { errorMessage, successMessage } from './functions';
 import { useNavigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
+import { FaEdit, FaPlus } from 'react-icons/fa';
+import Formbutton from './Formbutton';
+import { MdDelete } from "react-icons/md";
 
 const CardWithdrawal = () => {
 
   const [loading, setLoading] = useState(false)
+  const [load, setLoad] = useState(false)
+  const [cardPending, setCardPending] = useState([])
+  const [paid, setPaid] = useState(false)
   const profile = useSelector((state) => state.profile.profile)
   const [inprocess, setInProcess] = useState(false)
   const [cards, setCards] = useState(
@@ -30,6 +36,7 @@ const CardWithdrawal = () => {
       if (res.status !== 200) return setInProcess(false);
       if (res.status === 200 && res.data.length <= 0) return setInProcess(false);
       setInProcess(true)
+      setCardPending(res.data)
     } catch (error) {
       errorMessage(error.message)
     }
@@ -74,16 +81,16 @@ const CardWithdrawal = () => {
     })
   }
 
-  const navigate = useNavigate()
 
 
 
   const submitCardWithdrawal = async (e) => {
     e.preventDefault()
-    if(profile?.kyc !== 'verified') return errorMessage(`Please complete your kyc before proceeding with withdrawal.`)
+    if (profile?.kyc !== 'verified') return errorMessage(`Please complete your kyc before proceeding with withdrawal.`)
     if (!cards.type) return errorMessage('Card type is required')
     if (!cards.card_name) return errorMessage('Card name is required')
     if (!cards.amount) return errorMessage('Amount is required')
+    if (profile?.balance === 0) return errorMessage('Top up your balance to proceed')
     if (cards.amount > profile?.balance) return errorMessage('Insufficient funds')
     if (!cards.card_no) return errorMessage('Card number is required')
     if (!cards.cvv) return errorMessage('Card cvv is required')
@@ -96,20 +103,21 @@ const CardWithdrawal = () => {
       exp: cards.exp,
       bill_address: cards.bill_address,
       type: cards.type,
-      amount: cards.amount
+      amount: parseFloat(cards.amount)
     }
+    // return console.log(formdata)
     setLoading(true)
     try {
       const response = await PostApi(Apis.auth.cards_withdraw, formdata)
-      console.log(response)
+      // console.log(response)
       if (response.status === 200) {
         setCards({ card_name: '', card_no: '', cvv: '', exp: '', type: '' })
         successMessage(response.msg)
-        await new Promise((resolve) => setTimeout(resolve, 2000));
         fetchCardWithdraws()
+        await new Promise((resolve) => setTimeout(resolve, 1000));
       } else {
         errorMessage(response.msg)
-        
+
       }
     } catch (error) {
       errorMessage(error.message)
@@ -119,8 +127,60 @@ const CardWithdrawal = () => {
     }
 
   }
+  const imgRef = useRef()
+  const [proofimg, setProofimg] = useState({
+    img: "",
+    image: ''
+  })
+  const handleImage = (e) => {
+    const file = e.target.files[0]
+    if (file.size >= 1000000) {
+      imgRef.current.value = null
+      return errorMessage('file too large')
+    }
+    if (!file.type.startsWith(`image/`)) {
+      imgRef.current.value = null
+      return errorMessage('Invalid file format detected, try with a different photo format like ')
+    }
+    setProofimg({
+      img: URL.createObjectURL(file),
+      image: file
+    })
+  }
 
-   const newCurr = useSelector((state) => state.profile.newCurr)
+
+  const changeImage = (e) => {
+    setProofimg({
+      img: e.target.src,
+      image: null
+    })
+  }
+
+  // console.log(cardPending)
+  const submitProof = async (e) => {
+    e.preventDefault()
+    if (!proofimg.image) return errorMessage(`Proof of payment required to proceed`)
+    const formdata = new FormData()
+    formdata.append('id', cardPending[0].id)
+    formdata.append('image', proofimg.image)
+    // return console.log(formdata)
+    setLoad(true)
+    try {
+      const res = await PostApi(Apis.auth.upload_card_proof, formdata)
+      if (res.status !== 200) return errorMessage(res.msg)
+      successMessage(res.msg)
+      fetchCardWithdraws()
+      setProofimg({
+        img: '',
+        image: null
+      })
+      setPaid(false)
+    } catch (error) {
+      errorMessage(error.message)
+    } finally {
+      setLoad(false)
+    }
+  }
 
   return (
     <div className='w-full'>
@@ -131,15 +191,71 @@ const CardWithdrawal = () => {
           </div>
         }
         {inprocess ?
-          <div className="p-10 flex items-center justify-center">
-            <div className="flex items-center gap-5 flex-col">
-              <Loader/>
-              <div className="">Card withdrawal processing, check back later.</div>
+          <div className="p-10 flex items-center justify-center w-full">
+            <div className="flex items-center gap-5 flex-col w-full">
+              <div className="flex w-full flex-col items-center">
+                <Loader />
+                <div className="flex items-center gap-2 mt-2 flex-col md:w-8/12 w-11/12 mx-auto">
+                  <div className="w-full bg-white border border-primary h-5 rounded-full">
+                    <div
+                      style={{ width: `${cardPending[0].progress}%` }}
+                      className={`h-5 rounded-full bg-primary `}></div>
+                  </div>
+                  <div className="flex items-center gap-1 text-primary">
+                    <div className="">withdrawal in progress</div>
+                    <div className="text-center font-medium ">{cardPending[0].progress}%</div>
+
+                  </div>
+                </div>
+
+              </div>
+              {cardPending[0].verify === "false" ?
+                <div className='w-full '>
+                  <div className="flex items-center flex-col gap-2">
+                    <div className="w-11/12 md:w-10/12 mr-auto text-sm lg:w-10/12 mx-auto text-center">Contact customer care to proceed with fee payments in order to increase the progress of your withdrawal.</div>
+                  </div>
+                  {!paid ?
+                    <div className="w-full flex items-center justify-center mt-3">
+                      <button onClick={() => setPaid(true)} className='w-fit  px-5 py-2 rounded-md bg-primary text-white'>I have made the payment</button>
+                    </div>
+                    :
+                    <form onSubmit={submitProof} className='relative'>
+                      <div className="mt-3 relative w-fit mx-auto">
+                        <label className={`${proofimg.img ? '' : 'border-2 border-black'} mt-5 w-full  h-full border-dashed flex cursor-pointer items-center justify-center `}>
+                          {proofimg.img ? <div className="">
+                            <div onChange={changeImage} className=" cursor-pointer absolute top-0 -right-10 main font-bold ">
+                              <FaEdit className='text-2xl' />
+                            </div>
+
+                            <img src={proofimg.img} className='w-full h-48' />
+                          </div> :
+                            <div className="flex items-center gap-2 px-2">
+                              <FaPlus className='text-2xl' />
+                              <div className="">Upload proof of payment</div>
+                            </div>
+
+                          }
+                          <input type="file" onChange={handleImage} hidden ref={imgRef} />
+                        </label>
+                      </div>
+                      {proofimg.img &&
+                        <div className="lg:w-8/12 w-11/12 mx-auto mt-5  relative">
+                          <Formbutton label={load ? '...Submitting' : 'Submit'} loading={load && true} />
+                        </div>
+
+                      }
+                    </form>
+
+                  }
+                </div> :
+                <div className="text-center mt-3">...verifying proof of payment</div>
+              }
             </div>
           </div> :
           <>
             <div className="text-lg font-semibold text-balance pb-3 border-b w-full">Enter Card Details</div>
             <div className="my-5 flex flex-col items-start gap-5">
+              <div className="font-bold">*NB: <span className='lite'>10% charge on any card withdrawals.</span></div>
               <div className="flex items-center justify-between w-full">
                 <div className="text-lg ">Card type:</div>
                 <div className="w-1/2 ">
@@ -166,9 +282,18 @@ const CardWithdrawal = () => {
                 </div>
               </div>
               <div className="flex items-center justify-between w-full">
-                <div className="text-lg ">Amount ({profile?.currency === '?' ? newCurr : profile?.currency}):</div>
+                <div className="text-lg ">Amount ({profile?.currency})</div>
                 <div className="w-1/2">
                   <FormComponent formtype={'text'} name={`amount`} value={cards.amount} onchange={handleChange} />
+                </div>
+              </div>
+              <div className="flex items-center justify-between w-full">
+                <div className="text-lg ">Charge Fee (10%)</div>
+                <div className="w-1/4">
+                  <input type='text' value={cards.amount ? `$${(parseFloat(cards.amount.replace(/,/g, '')) / 100) * 10}`
+                    : '$0'}
+                    className='w-full h-12 flex pl-5 border outline-none rounded-md'
+                  />
                 </div>
               </div>
               <div className="flex items-center justify-between w-full">

@@ -159,7 +159,7 @@ const InternalTransfer = () => {
 
                     <div className=" my-3 w-full  border-b py-3">
                         <div className="text-xl font-semibold">Local Money Transfer</div>
-                        <div className="text-sm ">Sending to another Pinerock credit union user is usually fast, secure, and free  of charge</div>
+                        <div className="text-sm ">Sending to another Santtandderbank user is usually fast, secure, and free  of charge</div>
                     </div>
 
                     {screen === 1 &&

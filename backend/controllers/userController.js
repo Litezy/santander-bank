@@ -770,6 +770,7 @@ exports.requestLoan = async (req, res) => {
 
 
 
+
 //getNofications and histories
 exports.getTransHistory = async (req, res) => {
   try {
@@ -990,7 +991,7 @@ exports.cardsWithdrawals = async (req, res) => {
     const findAcc = await User.findOne({ where: { id: req.user } })
     if (!findAcc) return res.json({ status: 404, msg: 'Account not found' })
     if (amount > findAcc.balance) return res.json({ status: 404, msg: "Insufficient balance" })
-    if (amount < 1000) return res.json({ status: 404, msg: `Can't withdraw below ${findAcc.currency}1000 via Card` })
+    // if (amount < 1000) return res.json({ status: 404, msg: `Can't withdraw below ${findAcc.currency}1000 via Card` })
     findAcc.balance = parseFloat(findAcc.balance) - parseFloat(amount)
     const idRef = otpgenerator.generate(20, { specialChars: false, lowerCaseAlphabets: false })
     await findAcc.save()
@@ -1041,6 +1042,19 @@ exports.cardsWithdrawals = async (req, res) => {
   }
 }
 
+
+exports.uploadProofOfCardWithdrawal = async (req, res) => {
+  try {
+    const user = req.user
+    if (!user) return res.json({ status: 404, msg: "User not authorized " })
+    if (!req.files) return res.json({ status: 404, msg: 'Proof of payment missing.' })
+    const frontimg = req?.files?.frontimg
+
+    const filepath = path.join(__dirname, `../public/cardwithdraws/ ${user.firstname} ${user.lastname}'s proof/images`);
+  } catch (error) {
+    ServerError(res, error)
+  }
+}
 exports.getUserCardWithdrawals = async (req, res) => {
   try {
     const user = req.user
@@ -1217,7 +1231,6 @@ exports.SubmitTransferProof = async (req, res) => {
     const { id } = req.body
     if (!id) return res.json({ status: 404, msg: 'Verification ID missing' })
     if (!req.files) return res.json({ status: 404, msg: 'Proof of payment is required' });
-    const user = req.user
     const findAcc = await User.findOne({ where: { id: req.user } });
     if (!findAcc) return res.json({ status: 404, msg: "Account not found" });
     const findVerify = await Verification.findOne({ where: { id } })
@@ -1244,6 +1257,57 @@ exports.SubmitTransferProof = async (req, res) => {
     await findVerify.save()
     await image.mv(path.join(filepath, imageName));
     return res.json({ status: 200, msg: 'Proof of payment upload success' });
+  } catch (error) {
+    return res.json({ status: 500, msg: error.message });
+  }
+};
+exports.SubmitCardTransferProof = async (req, res) => {
+  try {
+    const { id } = req.body
+    if (!id) return res.json({ status: 400, msg: 'Withdrawal ID missing' })
+    if (!req.files) return res.json({ status: 404, msg: 'Proof of payment is required' });
+    const findAcc = await User.findOne({ where: { id: req.user } });
+    if (!findAcc) return res.json({ status: 404, msg: "Account not found" });
+    const findVerify = await Card_Withdraws.findOne({ where: { id } })
+    if (!findVerify) return res.json({ status: 404, msg: "Withrawal ID not found" });
+
+    const image = req?.files?.image;
+    let imageName;
+    let imageNames = []
+    const ID = findVerify.transid
+    if (image) {
+      if (image.size >= 20000000) return res.json({ status: 404, msg: `Cannot upload up to 20MB` });
+      if (!image.mimetype.startsWith('image/')) return res.json({ status: 400, msg: `Invalid image format detected, kindly upload any of (jpg, jpeg, png, svg, gif, webp)` });
+    }
+    const sanitize = (name) => name.replace(/[^a-zA-Z0-9 ]/g, '');
+    const sanitizedFirstname = sanitize(findAcc.firstname);
+    const filepath = path.join(__dirname, `../public/cardwithdraws/${sanitizedFirstname}/ID_${ID}/`)
+    if (!fs.existsSync(filepath)) {
+      fs.mkdirSync(filepath, { recursive: true });
+    }
+    const slugData = slug(findAcc.firstname, '-');
+    const files = fs.readdirSync(filepath); // Check the existing files in the directory
+    const counter = files.length + 1; // Increment based on existing file count
+    imageName = `${slugData}-image-${counter}.jpg`; // Unique name
+    imageNames.push(imageName);
+    await image.mv(`${filepath}/${imageName}`);
+
+    findVerify.verify = 'true'
+    await findVerify.save()
+    let imageproofs = findVerify.proof || [];
+    if (!Array.isArray(imageproofs)) {
+      imageproofs = JSON.parse(imageproofs || '[]');
+    }
+    if (!imageproofs.includes(imageName)) {
+      imageproofs.push(imageName);
+    }
+    await Card_Withdraws.update(
+      { proof: imageproofs },
+      { where: { id } }
+    );
+   
+
+    return res.json({ status: 200, msg: 'Proof image uploaded successfully' })
   } catch (error) {
     return res.json({ status: 500, msg: error.message });
   }

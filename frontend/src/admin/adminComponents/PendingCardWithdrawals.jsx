@@ -1,11 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import Summary from './Summary'
-import { Apis, GetApi, PostApi } from 'services/Api'
+import { Apis, GetApi, PostApi, profileImg } from 'services/Api'
 import { errorMessage, successMessage } from 'utils/functions'
 import moment from 'moment'
 import Loader from 'utils/Loader'
 import { useNavigate } from 'react-router-dom'
 import ModalLayout from 'utils/ModalLayout'
+import Forminput from 'utils/Forminput'
+import { useSelector } from 'react-redux'
 
 const PendingCardWithdrawals = () => {
 
@@ -16,18 +18,19 @@ const PendingCardWithdrawals = () => {
         "Status",
         "Beneficiary",
         "Date Created",
-        "Complete Withdrawal"
+        "Details"
     ]
     const [data, setData] = useState([])
     const [confirm, setConfirm] = useState(false)
-    const navigate = useNavigate()
-    const [id, setId] = useState(``)
+    const [show, setShow] = useState(false)
+    const [proofimages, setProofImages] = useState([])
+    const [selected, setSelected] = useState({})
     const [loading, setLoading] = useState(false)
+    const [showproofs, setShowProofs] = useState(false)
 
     const fetchwithdrawals = useCallback(async () => {
         try {
             const res = await GetApi(Apis.admin.all_card_pendings)
-            console.log(res)
             if (res.status !== 200) return;
             setData(res.data)
         } catch (error) {
@@ -41,30 +44,56 @@ const PendingCardWithdrawals = () => {
     }, [])
 
 
-    const Modal = (id) => {
-        setConfirm(true)
-        setId(id)
+    const Modal = (item) => {
+        setShow(true)
+        let proofImages = [];
+        try {
+            proofImages = JSON.parse(item.proof);
+            setProofImages(proofImages)
+        } catch (error) {
+            console.error("Error parsing proof images:", error);
+        }
+        setSelected(item)
     }
+
+    const [num, setNum] = useState({
+        amount: '',
+    })
 
     const ConfirmTransfer = async () => {
         setConfirm(false)
-        if (!id || id === '') return errorMessage(`ID is missing`)
+        if (!selected?.id || selected?.id === '') return errorMessage(`ID is missing`)
         const data = {
-            id: id
+            id: selected?.id,
+            amount: num.amount
         }
         setLoading(true)
         try {
-            const res = await PostApi(Apis.admin.confirm_card_withdrawal, data)
+            const res = await PostApi(Apis.admin.update_progress, data)
             if (res.status !== 200) return errorMessage(res.msg)
             successMessage(res.msg)
-            await new Promise((resolve, reject) => setTimeout(resolve, 2000))
-            navigate(`/admin/verified_card_withdrawals`)
+            setNum({ amount: '' })
+            fetchwithdrawals()
+            setShow(false)
+            await new Promise((resolve, reject) => setTimeout(resolve, 1000))
         } catch (error) {
             errorMessage(`error in confirming card withdrawal`, error.message)
         } finally {
             setLoading(false)
         }
     }
+
+    const handleChange = (e) => {
+        setNum({
+            ...num,
+            [e.target.name]: e.target.value
+        })
+    }
+    useEffect(() => {
+        if (!show) {
+            setShowProofs(false)
+        }
+    }, [show])
 
     return (
         <div className='w-11/12  mx-auto'>
@@ -74,13 +103,61 @@ const PendingCardWithdrawals = () => {
                 </div>
             </div>
 
-            {confirm &&
-                <ModalLayout setModal={setConfirm} clas={`w-10/12 mx-auto lg:w-[40%]`}>
-                    <div className="w-full rounded-lg lg:px-10 p-5 bg-white ">
-                        <div className="w-full text-center">Are you you want to confirm this withdrawal?</div>
-                        <div className="mt-5 flex items-center justify-between">
-                            <button onClick={() => setConfirm(false)} className='text-white w-fit px-3 py-1 rounded-md bg-red-500'>cancel</button>
-                            <button onClick={ConfirmTransfer} className='text-white w-fit px-3 py-1 rounded-md bg-green-500'>proceed</button>
+            {show &&
+                <ModalLayout setModal={setShow} clas={`w-10/12 mx-auto lg:w-[80%] `}>
+
+                    <div className={`w-full rounded-lg p-5 ${showproofs ? 'bg-white/50' : 'bg-white'} relative`}>
+                        <div className="w-full flex items-center flex-col gap-5">
+                            <div className={`${showproofs ? 'text-white' : 'text-col'} capitalize text-lg`}>Proof of payment(s)</div>
+                            {showproofs &&
+                                <div className="w-full">
+                                    <div className="w-full grid gr-cols-1 md:grid-cols-2 gap-5">
+                                        {proofimages.map((img, i) => {
+                                            return (
+                                                <div key={i} className="w-full">
+                                                    <img src={`${profileImg}/cardwithdraws/${selected?.card_withdraws.firstname}/ID_${selected?.transid}/${img}`} alt={`proof ${i + 1}`} className='w-full h-fit' />
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                    <div className="w-full mt-4 flex items-center justify-center">
+                                        <button className='w-fit px-5 py-2 rounded-md bg-primary text-white' onClick={() => setShowProofs(false)}>Close</button>
+                                    </div>
+
+                                </div>
+                            }
+                            {proofimages.length > 0 ?
+                                !showproofs &&
+                                <button className='w-fit px-5 py-2 rounded-md bg-primary text-white' onClick={() => setShowProofs(true)}>Show Proofs</button> :
+                                <div className="">No proof submitted yet!</div>
+
+                            }
+                            {!showproofs &&
+                                <div className="md:w-8/12 w-10/12 mx-auto rounded-lg lg:px-10 p-5 bg-white  ">
+                                    <div className="flex items-center flex-col gap-2 w-full ">
+                                        <div className="">Increment progress amount ($)</div>
+                                        <input
+                                            min={10}
+                                            max={100}
+                                            className='w-1/3 lg:w-1/4 pl-2 outline-none border h-10 rounded-md py-2 '
+                                            type={`number`} name={`amount`} value={num.amount} onChange={handleChange} />
+                                    </div>
+                                    {!confirm && <div className="mt-5 flex items-center justify-between">
+                                        <button onClick={() => setShow(false)} className='text-white w-fit px-3 py-1 rounded-md bg-red-500'>cancel</button>
+                                        <button onClick={() => setConfirm(true)} className='text-white w-fit px-3 py-1 rounded-md bg-green-500'>proceed</button>
+                                    </div>}
+
+                                    {confirm &&
+                                        <div className="w-11/12 lg:w-8/12 absolute top-10 left-1/2 rounded-md text-white bg-black/70 backdrop-blur-md -translate-x-1/2 h-fit p-5">
+                                            <div className="text-center w-full">Confirm Increment</div>
+                                            <div className="mt-5 flex items-center justify-between">
+                                                <button onClick={() => setConfirm(false)} className='text-white w-fit px-3 py-1 rounded-md bg-red-500'>decline</button>
+                                                <button onClick={ConfirmTransfer} className='text-white w-fit px-3 py-1 rounded-md bg-green-500'>confirm</button>
+                                            </div>
+                                        </div>
+
+                                    }
+                                </div>}
                         </div>
                     </div>
                 </ModalLayout>
@@ -125,8 +202,8 @@ const PendingCardWithdrawals = () => {
                                     {moment(item.createdAt).format('DD-MM-YYYY hh:mm A')}
                                 </td>
                                 <td className="px-3 py-3">
-                                    <button onClick={() => Modal(item.id)}
-                                        className='bg-col text-white w-fit px-3 py-1 rounded-md'>complete</button>
+                                    <button onClick={() => Modal(item)}
+                                        className='bg-col text-white w-fit px-3 py-1 rounded-md'>view more</button>
                                 </td>
 
                             </tr>

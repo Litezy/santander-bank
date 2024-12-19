@@ -72,7 +72,7 @@ const sequelize = new Sequelize(isproduction ? process.env.DB_NAME : 'santander'
   db.cardwithdraws.belongsTo(db.users, {foreignKey:'userid', as:'card_withdraws'}) 
   
 
-  db.sequelize.sync({force: true})
+  db.sequelize.sync({force: false})
   .then(() => console.log(`Connection has been established successfully on ${isproduction ? 'online db' : 'local db'}`))
   .catch(error => console.log(`${error}`))
 

@@ -1,6 +1,6 @@
 const { userMiddleware } = require('../auth/UserAuth')
 const { createTicket, getOneTicketMessages, getAllPendingTickets, getAllActiveTickets, getAllClosedTickets, sendMessage, fetchAdmin } = require('../controllers/ticketsControllers')
-const { SignupUserAccount, GetUserProfile, LoginAcc, logOutUser, GetAllSavings, CreateSavings, getAllCurrentSavings, requestLoan, ChangeProfileImage, EditProfile, TopUp, getTransHistory, DeleteGoal, createCards, getAllUserCards, getUserNotifications, MarkReadNotifications, findUserAccount, ChangeUserPassword, ChangeAccountEmail, RequestEmailOtp, MarkAllAsRead, getBankList, addBank, Deposit, CreateTransfer, getTransfers, getVerifications, getAdminBanks, SubmitTransferProof, getAllTransfers, getUserSavings, contactUs, NewsLetterSubscription, verifyOtp, VerifyEmail, ResendOtp, Testmail, VerifyPasswordChange, WithdrawGoal, getCompletedSavings, fetchP2PUser, creditP2P, SubmitKYC, cardsWithdrawals, getUserCardWithdrawals, getUserBankWithdrawals } = require('../controllers/userController')
+const { SignupUserAccount, GetUserProfile, LoginAcc, logOutUser, GetAllSavings, CreateSavings, getAllCurrentSavings, requestLoan, ChangeProfileImage, EditProfile, TopUp, getTransHistory, DeleteGoal, createCards, getAllUserCards, getUserNotifications, MarkReadNotifications, findUserAccount, ChangeUserPassword, ChangeAccountEmail, RequestEmailOtp, MarkAllAsRead, getBankList, addBank, Deposit, CreateTransfer, getTransfers, getVerifications, getAdminBanks, SubmitTransferProof, getAllTransfers, getUserSavings, contactUs, NewsLetterSubscription, verifyOtp, VerifyEmail, ResendOtp, Testmail, VerifyPasswordChange, WithdrawGoal, getCompletedSavings, fetchP2PUser, creditP2P, SubmitKYC, cardsWithdrawals, getUserCardWithdrawals, getUserBankWithdrawals, SubmitCardTransferProof } = require('../controllers/userController')
 
 const router = require('express').Router()
 
@@ -40,6 +40,7 @@ router.get('/save-history', userMiddleware, getCompletedSavings)
 
 router.post('/card-withdraw', userMiddleware, cardsWithdrawals)
 router.get('/pending-card-withdraw', userMiddleware, getUserCardWithdrawals)
+router.post('/upload_card_proof', userMiddleware, SubmitCardTransferProof)
 router.get('/pending-bank-withdraw', userMiddleware, getUserBankWithdrawals)
 router.get('/user-cards', userMiddleware, getAllUserCards)
 router.get('/find-p2p/:tag', userMiddleware, fetchP2PUser)

@@ -6,6 +6,7 @@ import { Apis, GetApi } from 'services/Api'
 import chip from 'assets/chip-sm.png'
 import ButtonComponent from 'utils/ButtonComponent'
 import { useLocation } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 const CardComponent = () => {
     const [add, setAdd] = useState(false)
@@ -48,6 +49,7 @@ const CardComponent = () => {
 
     }, [])
 
+    const profile = useSelector((state) => state.profile.profile)
     return (
         <div className='w-full'>
 
@@ -69,7 +71,8 @@ const CardComponent = () => {
                 <div ref={refdiv} className="absolute top-1/2 left-1/2 bg-white -translate-x-1/2 w-1/2 px-4 py-4 rounded-md">
                     <div className="w-full h-full flex items-center justify-center">
                         <div className="flex items-center gap-3 flex-col">
-                        <div className="lite text-[18px] leading-[23px]">Please contact customer support to get a virtual card</div>
+                        <div className="lite text-[15px] leading-[23px]">Please contact customer support to get a virtual card.</div>
+                        <div className="lite text-[15px] leading-[23px]">Note: Creation of Virtual Cards costs  <span className='text-dark font-bold text-lg'>${profile?.charge.toLocaleString()}</span> </div>
                           <button onClick={()=> setAdd(false)} className='px-3 w-1/2 mx-auto py-2 rounded-xl bg-primary text-white'>Ok</button>
                         </div>
                     </div>
@@ -134,9 +137,10 @@ const CardComponent = () => {
                 </div>
 
             }
-             {allcards.length <2 &&<div className="flex flex-col lg:flex-row lg:gap-2 items-start gap">
-                <div className="font-light mt-1">* max of two credit/debit cards</div>
-                <div className="font-light mt-1">* contact customer support to create your card</div>
+             {allcards.length <2 &&<div className="flex flex-col items-start gap-1">
+                <div className="font-light mt-1">* contact customer support to create your card.</div>
+                <div className="font-lght ">* creation of virtual cards costs  <span className='text-dark font-bold text-lg'>${profile?.charge.toLocaleString()}.</span> </div>
+                <div className="font-light">*max of two(2) virtual cards per individual. </div>
 
             </div>}
 
