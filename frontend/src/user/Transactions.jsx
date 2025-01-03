@@ -60,14 +60,7 @@ const Transactions = () => {
     }
   }
 
-  const copyToClip = async () => {
-    try {
-      await navigator.clipboard.writeText(selectedItem.transaction_id)
-      successMessage('Transaction ID copied!')
-    } catch (err) {
-      errorMessage('Failed to copy!')
-    }
-  }
+  
 
   const filterData = (val) => {
     if (val) {
